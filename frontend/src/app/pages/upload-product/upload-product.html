@@ -1,0 +1,419 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50 to-slate-50 py-8 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-2">Register New Product</h1>
+      <p class="text-slate-600">
+        Add your agricultural product to the blockchain-verified registry
+      </p>
+    </div>
+
+    <!-- Main Form Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      <form (ngSubmit)="uploadProduct()" class="p-6 md:p-8 space-y-6">
+        <!-- Crop Name -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">
+            Crop Name <span class="text-red-500">*</span>
+          </label>
+          <input [(ngModel)]="cropName" name="cropName" required
+            class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition"
+            placeholder="e.g., Basmati Rice, Red Onion, Organic Tomato" />
+        </div>
+
+        <!-- Soil & Pesticides Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Soil Type</label>
+            <input [(ngModel)]="soilType" name="soilType"
+              class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition"
+              placeholder="e.g., Loamy, Red Soil, Clay" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Pesticides Used</label>
+            <input [(ngModel)]="pesticides" name="pesticides"
+              class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition"
+              placeholder="e.g., None, Neem Oil, Organic" />
+          </div>
+        </div>
+
+        <!-- Price & Quantity Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="md:col-span-1">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+              Expected Price (₹/kg) <span class="text-red-500">*</span>
+            </label>
+            <input type="number" [(ngModel)]="price" name="price" required min="1"
+              class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition"
+              placeholder="e.g., 150" />
+          </div>
+          
+          <div class="md:col-span-1">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+              Quantity <span class="text-red-500">*</span>
+            </label>
+            <input type="number" [(ngModel)]="quantity" name="quantity" required min="1"
+              class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition"
+              placeholder="e.g., 1000" />
+          </div>
+          
+          <div class="md:col-span-1">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+              Unit <span class="text-red-500">*</span>
+            </label>
+            <select [(ngModel)]="quantityUnit" name="quantityUnit" required
+              class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition">
+              <option value="kg">Kilograms (kg)</option>
+              <option value="units">Units</option>
+              <option value="tons">Tons</option>
+              <option value="quintals">Quintals</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Harvest Date -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">
+            Harvest Date <span class="text-red-500">*</span>
+          </label>
+          <input type="date" [(ngModel)]="harvestDate" name="harvestDate" [max]="today" required
+            class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition" />
+        </div>
+
+        <!-- GPS Location -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">GPS Location</label>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <input [(ngModel)]="gpsLocation" name="gpsLocation" readonly
+              class="flex-1 px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 placeholder-slate-400"
+              placeholder="Click button to auto-detect location" />
+            <button type="button" (click)="detectGPS()" [disabled]="loading"
+              class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold rounded-lg shadow-sm hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              Detect GPS
+            </button>
+          </div>
+          <p class="mt-2 text-xs text-slate-500">
+            GPS coordinates will be recorded for product authenticity
+          </p>
+        </div>
+
+        <!-- Image Upload -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">
+            Product Image <span class="text-red-500">*</span>
+          </label>
+          <div
+            class="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-emerald-500 transition">
+            <input type="file" (change)="onFileSelected($event)" accept="image/*" required id="fileInput"
+              class="hidden" />
+            <label for="fileInput" class="cursor-pointer">
+              <div class="flex flex-col items-center gap-3">
+                <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center">
+                  <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-slate-700 font-medium">Click to upload product image</p>
+                  <p class="text-sm text-slate-500 mt-1">PNG, JPG up to 10MB</p>
+                </div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Image Preview -->
+          <div *ngIf="previewUrl" class="mt-6">
+            <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
+              <div class="flex items-start gap-4">
+                <img [src]="previewUrl" class="w-32 h-32 object-cover rounded-lg border-2 border-emerald-500" />
+                <div class="flex-1">
+                  <div class="flex items-center gap-2">
+                    <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd" />
+                    </svg>
+                    <p class="font-semibold text-emerald-700">Image uploaded successfully</p>
+                  </div>
+                  <p class="text-sm text-slate-600 mt-1">
+                    Your product image is ready for registration
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="border-t border-slate-200 pt-6">
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div class="flex gap-3">
+              <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                  clip-rule="evenodd" />
+              </svg>
+              <div>
+                <p class="text-sm font-semibold text-blue-900">Database Registration</p>
+                <p class="text-sm text-blue-700 mt-1">
+                  Your product will be registered on the Database with a unique QR code for
+                  verification and traceability.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" [disabled]="loading || !imageFile"
+          class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white text-lg font-semibold py-4 rounded-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3">
+          <svg *ngIf="loading" class="animate-spin w-5 h-5 text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+            </path>
+          </svg>
+          <span>{{ loading ? 'Registering Product...' : 'Register Product & Generate QR' }}</span>
+        </button>
+
+        <!-- Required Fields Note -->
+        <p class="text-center text-sm text-slate-500">
+          <span class="text-red-500">*</span> Required fields
+        </p>
+      </form>
+    </div>
+
+    <!-- Footer Info -->
+    <div class="mt-8 text-center">
+      <p class="text-sm text-slate-600">
+        Secured by <span class="font-semibold text-emerald-600">FarmChainX</span>Hashing Technology
+      </p>
+    </div>
+  </div>
+
+  <!-- AI Prediction Results Modal -->
+  <div *ngIf="showPrediction && aiPrediction"
+    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
+    (click)="closePredictionModal()">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+      (click)="$event.stopPropagation()">
+
+      <!-- Header -->
+      <div class="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 text-white sticky top-0 z-10">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <div>
+              <h2 class="text-2xl font-bold">AI Quality Analysis</h2>
+              <p class="text-emerald-100 text-sm">Powered by Groq AI</p>
+            </div>
+          </div>
+          <button (click)="closePredictionModal()" class="text-white hover:bg-white/20 rounded-full p-2 transition">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="p-6 space-y-6">
+
+        <!-- Quality Grade Card -->
+        <div [ngClass]="{
+          'bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-300': getQualityColor(aiPrediction.qualityGrade) === 'emerald',
+          'bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-300': getQualityColor(aiPrediction.qualityGrade) === 'yellow',
+          'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-300': getQualityColor(aiPrediction.qualityGrade) === 'orange',
+          'bg-gradient-to-br from-slate-50 to-slate-100 border-slate-300': getQualityColor(aiPrediction.qualityGrade) === 'slate'
+        }" class="border-2 rounded-xl p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p [ngClass]="{
+                'text-emerald-700': getQualityColor(aiPrediction.qualityGrade) === 'emerald',
+                'text-yellow-700': getQualityColor(aiPrediction.qualityGrade) === 'yellow',
+                'text-orange-700': getQualityColor(aiPrediction.qualityGrade) === 'orange',
+                'text-slate-700': getQualityColor(aiPrediction.qualityGrade) === 'slate'
+              }" class="text-sm font-semibold mb-1">Quality Grade</p>
+              <p [ngClass]="{
+                'text-emerald-800': getQualityColor(aiPrediction.qualityGrade) === 'emerald',
+                'text-yellow-800': getQualityColor(aiPrediction.qualityGrade) === 'yellow',
+                'text-orange-800': getQualityColor(aiPrediction.qualityGrade) === 'orange',
+                'text-slate-800': getQualityColor(aiPrediction.qualityGrade) === 'slate'
+              }" class="text-5xl font-bold">
+                {{aiPrediction.qualityGrade || 'N/A'}}
+              </p>
+            </div>
+            <div class="text-right">
+              <p [ngClass]="{
+                'text-emerald-700': getQualityColor(aiPrediction.qualityGrade) === 'emerald',
+                'text-yellow-700': getQualityColor(aiPrediction.qualityGrade) === 'yellow',
+                'text-orange-700': getQualityColor(aiPrediction.qualityGrade) === 'orange',
+                'text-slate-700': getQualityColor(aiPrediction.qualityGrade) === 'slate'
+              }" class="text-sm font-semibold mb-1">Score</p>
+              <p [ngClass]="{
+                'text-emerald-800': getQualityColor(aiPrediction.qualityGrade) === 'emerald',
+                'text-yellow-800': getQualityColor(aiPrediction.qualityGrade) === 'yellow',
+                'text-orange-800': getQualityColor(aiPrediction.qualityGrade) === 'orange',
+                'text-slate-800': getQualityColor(aiPrediction.qualityGrade) === 'slate'
+              }" class="text-4xl font-bold">
+                {{aiPrediction.qualityScore || 0}}<span class="text-2xl">/100</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Confidence Bar -->
+          <div class="mt-4">
+            <div [ngClass]="{
+              'text-emerald-700': getQualityColor(aiPrediction.qualityGrade) === 'emerald',
+              'text-yellow-700': getQualityColor(aiPrediction.qualityGrade) === 'yellow',
+              'text-orange-700': getQualityColor(aiPrediction.qualityGrade) === 'orange',
+              'text-slate-700': getQualityColor(aiPrediction.qualityGrade) === 'slate'
+            }" class="flex justify-between text-sm mb-2">
+              <span>AI Confidence</span>
+              <span class="font-semibold">{{aiPrediction.confidence || 85}}%</span>
+            </div>
+            <div class="w-full bg-white rounded-full h-3 overflow-hidden">
+              <div [ngClass]="{
+                'bg-emerald-600': getQualityColor(aiPrediction.qualityGrade) === 'emerald',
+                'bg-yellow-600': getQualityColor(aiPrediction.qualityGrade) === 'yellow',
+                'bg-orange-600': getQualityColor(aiPrediction.qualityGrade) === 'orange',
+                'bg-slate-600': getQualityColor(aiPrediction.qualityGrade) === 'slate'
+              }" class="h-full rounded-full transition-all duration-1000"
+                [style.width.%]="aiPrediction.confidence || 85">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Market Insights Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                <path fill-rule="evenodd"
+                  d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                  clip-rule="evenodd" />
+              </svg>
+              <p class="font-semibold text-blue-900">Market Readiness</p>
+            </div>
+            <p class="text-blue-800">{{aiPrediction.marketReadiness || 'Ready for market'}}</p>
+          </div>
+
+          <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                <path fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
+                  clip-rule="evenodd" />
+              </svg>
+              <p class="font-semibold text-purple-900">Price Estimate</p>
+            </div>
+            <p class="text-purple-800">{{aiPrediction.priceEstimate || 'Market price varies'}}</p>
+          </div>
+
+          <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <svg class="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                  clip-rule="evenodd" />
+              </svg>
+              <p class="font-semibold text-orange-900">Selling Window</p>
+            </div>
+            <p class="text-orange-800">{{aiPrediction.optimalSellingWindow || '1-3 days after harvest'}}</p>
+          </div>
+
+          <div class="bg-teal-50 border border-teal-200 rounded-lg p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <svg class="w-5 h-5 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd" />
+              </svg>
+              <p class="font-semibold text-teal-900">Certification</p>
+            </div>
+            <p class="text-teal-800">{{aiPrediction.certificationEligibility || 'Conventional'}}</p>
+          </div>
+        </div>
+
+        <!-- Storage Recommendation -->
+        <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">
+          <p class="font-semibold text-slate-900 mb-2 flex items-center gap-2">
+            <svg class="w-5 h-5 text-slate-600" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M3 12v3c0 1.657 3.134 3 7 3s7-1.343 7-3v-3c0 1.657-3.134 3-7 3s-7-1.343-7-3z" />
+              <path d="M3 7v3c0 1.657 3.134 3 7 3s7-1.343 7-3V7c0 1.657-3.134 3-7 3S3 8.657 3 7z" />
+              <path d="M17 5c0 1.657-3.134 3-7 3S3 6.657 3 5s3.134-3 7-3 7 1.343 7 3z" />
+            </svg>
+            Storage Recommendation
+          </p>
+          <p class="text-slate-700">{{aiPrediction.storageRecommendation || 'Store in cool, dry place. Maintain proper
+            ventilation.'}}</p>
+        </div>
+
+        <!-- AI Insights -->
+        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-200 rounded-lg p-4">
+          <p class="font-semibold text-indigo-900 mb-3 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
+            </svg>
+            AI-Generated Insights
+          </p>
+          <ul class="space-y-2" *ngIf="aiPrediction.insights && aiPrediction.insights.length > 0">
+            <li *ngFor="let insight of aiPrediction.insights" class="flex items-start gap-2 text-indigo-800">
+              <svg class="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd" />
+              </svg>
+              <span>{{insight}}</span>
+            </li>
+          </ul>
+          <p *ngIf="!aiPrediction.insights || aiPrediction.insights.length === 0" class="text-indigo-800">
+            Product appears to be in good condition. Monitor storage conditions regularly.
+          </p>
+        </div>
+
+        <!-- Warnings (if any) -->
+        <div *ngIf="aiPrediction.warnings && aiPrediction.warnings.length > 0"
+          class="bg-amber-50 border-l-4 border-amber-500 p-4">
+          <div class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-amber-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                clip-rule="evenodd" />
+            </svg>
+            <div>
+              <p class="font-semibold text-amber-900 mb-2">Important Warnings</p>
+              <ul class="space-y-1">
+                <li *ngFor="let warning of aiPrediction.warnings" class="text-amber-800 text-sm">• {{warning}}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-3 pt-4 border-t border-slate-200">
+          <button (click)="closePredictionModal()"
+            class="flex-1 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition">
+            View Dashboard
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

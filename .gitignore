@@ -1,0 +1,27 @@
+# Build directories
+backend/target/
+backend/farmchainX/target/
+**/target/
+
+# Environment files
+backend/.env
+backend/**/.env
+.env
+.env.local
+
+# Upload directories (may contain sensitive user data)
+backend/farmchainX/uploads/
+**/uploads/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+

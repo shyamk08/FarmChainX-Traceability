@@ -1,0 +1,267 @@
+<nav class="sticky top-0 left-0 w-full z-50 backdrop-blur-xl border-b border-white/10 transition-all duration-500"
+  [ngClass]="{
+    'bg-white/80': isScrolled,
+    'bg-gradient-to-r from-gray-800 to-emerald-800': !isScrolled
+  }">
+  <div class="max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
+    <div class="flex items-center justify-between h-20">
+      <a routerLink="/" class="flex items-center gap-3">
+        <svg class="w-8 h-8 text-white transition duration-500" [ngClass]="{
+            'text-emerald-600': isScrolled,
+            'text-white': !isScrolled
+          }" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 12l2 2 4-4m5.618-4.103A.908.908 0 0017.9 3.5h-3.414A.908.908 0 0013.9 3.5l-4.5 4.5V20.5a.5.5 0 00.5.5h8.5a.5.5 0 00.5-.5v-13z" />
+        </svg>
+
+        <div class="text-3xl font-black bg-clip-text text-transparent transition duration-500" [ngClass]="{
+            'bg-gradient-to-r from-green-600 to-teal-700': isScrolled,
+            'bg-gradient-to-r from-emerald-200 to-lime-400': !isScrolled
+          }">
+          FarmChainX
+        </div>
+      </a>
+
+      <div class="hidden md:flex items-center gap-15 text-lg font-bold">
+        <ng-container *ngIf="!isLoggedIn">
+          <a routerLink="/login"
+            class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-7 py-3 rounded-full font-semibold shadow-xl hover:scale-105 transition">
+            Login
+          </a>
+
+          <a routerLink="/register"
+            class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-7 py-3 rounded-full font-semibold shadow-xl hover:scale-105 transition">
+            Register
+          </a>
+        </ng-container>
+
+        <ng-container *ngIf="isLoggedIn">
+          <a routerLink="/scanner"
+            class="group flex items-center gap-2 bg-emerald-600/90 hover:bg-emerald-700 text-white px-6 py-3 rounded-full shadow-lg hover:scale-105 transition">
+            <svg class="w-5 h-5 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 7v4a1 1 0 001 1h4M21 7v4a1 1 0 01-1 1h-4M3 17v-4a1 1 0 011-1h4M21 17v-4a1 1 0 00-1-1h-4" />
+            </svg>
+            Scan
+          </a>
+
+          <ng-container *ngIf="isFarmer">
+            <a routerLink="/upload" class="text-gray-200 hover:text-white transition">Upload</a>
+            <a routerLink="/products/my" class="text-gray-200 hover:text-white transition">My Products</a>
+          </ng-container>
+
+          <a *ngIf="isAdmin" routerLink="/admin"
+            class="bg-gradient-to-r from-green-600 via-pink-600 to-green-600 hover:scale-110 transition text-white px-7 py-3 rounded-full shadow-xl font-bold">
+            Admin
+          </a>
+
+          <div class="relative">
+            <button (click)="toggleUserMenu()" class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-full bg-white/20 text-white flex items-center justify-center font-bold backdrop-blur-lg">
+                {{ userName?.charAt(0)?.toUpperCase() }}
+              </div>
+            </button>
+
+            <div *ngIf="userMenuOpen"
+              class="absolute right-0 mt-3 w-64 bg-white text-gray-700 rounded-xl shadow-xl border overflow-hidden z-50">
+              <div class="px-4 py-4 bg-gradient-to-r from-emerald-50 to-teal-50 border-b">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-lg">
+                    {{ (userName?.charAt(0) || 'U').toUpperCase() }}
+                  </div>
+                  <div class="min-w-0">
+                    <p class="font-semibold text-gray-800 truncate">{{ userName }}</p>
+                    <p class="text-xs text-emerald-600 mt-0.5">{{ userRole }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="py-2">
+                <a routerLink="/profile" (click)="toggleUserMenu()"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">View Profile</a>
+                <a routerLink="/settings" (click)="toggleUserMenu()"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Settings</a>
+              </div>
+
+              <div class="px-4 py-3 border-t">
+                <button (click)="logout(); toggleUserMenu()"
+                  class="w-full bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition">
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <svg *ngIf="!mobileMenuOpen" (click)="toggleMobileMenu()"
+        class="h-8 w-8 md:hidden text-white cursor-pointer transition" fill="none" stroke="currentColor"
+        stroke-width="2" viewBox="0 0 24 24">
+        <line x1="4" y1="6" x2="20" y2="6" />
+        <line x1="4" y1="12" x2="20" y2="12" />
+        <line x1="4" y1="18" x2="20" y2="18" />
+      </svg>
+
+      <svg *ngIf="mobileMenuOpen" (click)="toggleMobileMenu()"
+        class="h-8 w-8 md:hidden text-white cursor-pointer transition" fill="none" stroke="currentColor"
+        stroke-width="2" viewBox="0 0 24 24">
+        <line x1="6" y1="6" x2="18" y2="18" />
+        <line x1="6" y1="18" x2="18" y2="6" />
+      </svg>
+    </div>
+  </div>
+
+  <div *ngIf="mobileMenuOpen" class="fixed inset-0 z-40 md:hidden">
+    <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" (click)="closeMobileMenu()"></div>
+
+    <div class="absolute inset-0 flex flex-col transform transition-transform duration-300 animate-slideDown" [ngClass]="{
+        'bg-white': isScrolled,
+        'bg-gray-900/90': !isScrolled
+      }">
+      <div class="flex items-center justify-between px-4 py-3 text-white" [ngClass]="{
+          'bg-gradient-to-r from-emerald-600 to-teal-600': isScrolled,
+          'bg-black/20': !isScrolled
+        }">
+        <div class="flex items-center gap-3">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M9 12l2 2 4-4m5.618-4.103A.908.908 0 0017.9 3.5h-3.414A.908.908 0 0013.9 3.5l-4.5 4.5V20.5a.5.5 0 00.5.5h8.5a.5.5 0 00.5-.5v-13z" />
+          </svg>
+          <div class="font-semibold text-lg">FarmChainX</div>
+        </div>
+        <button aria-label="Close menu" class="p-2 rounded-md hover:bg-white/10" (click)="closeMobileMenu()">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <line x1="6" y1="6" x2="18" y2="18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <line x1="6" y1="18" x2="18" y2="6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+      </div>
+
+      <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-4">
+        <div *ngIf="isLoggedIn" class="flex items-center gap-3 px-1 text-white">
+          <div
+            class="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xl">
+            {{ (userName?.charAt(0) || 'U').toUpperCase() }}
+          </div>
+          <div>
+            <p class="font-semibold">{{ userName }}</p>
+            <p class="text-sm text-emerald-400">{{ userRole }}</p>
+          </div>
+        </div>
+
+        <div class="divide-y rounded-lg overflow-hidden border" [ngClass]="{
+            'bg-white border-gray-100 divide-gray-100': isScrolled,
+            'bg-gray-800 border-gray-700 divide-gray-700': !isScrolled
+          }">
+          <a routerLink="/scanner" (click)="closeMobileMenu()"
+            class="flex items-center gap-3 px-4 py-4 hover:bg-gray-50" [ngClass]="{
+              'text-gray-700 hover:bg-gray-50': isScrolled,
+              'text-white hover:bg-gray-700': !isScrolled
+            }">
+            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 7v4a1 1 0 001 1h4M21 7v4a1 1 0 01-1 1h-4M3 17v-4a1 1 0 011-1h4M21 17v-4a1 1 0 00-1-1h-4" />
+            </svg>
+            <span class="flex-1">Scan QR</span>
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+
+          <a *ngIf="isFarmer" routerLink="/upload" (click)="closeMobileMenu()"
+            class="flex items-center gap-3 px-4 py-4 hover:bg-gray-50" [ngClass]="{
+              'text-gray-700 hover:bg-gray-50': isScrolled,
+              'text-white hover:bg-gray-700': !isScrolled
+            }">
+            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            <span class="flex-1">Upload Product</span>
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+
+          <a *ngIf="isFarmer" routerLink="/products/my" (click)="closeMobileMenu()"
+            class="flex items-center gap-3 px-4 py-4 hover:bg-gray-50" [ngClass]="{
+              'text-gray-700 hover:bg-gray-50': isScrolled,
+              'text-white hover:bg-gray-700': !isScrolled
+            }">
+            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18" />
+            </svg>
+            <span class="flex-1">My Products</span>
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+
+          <a *ngIf="isAdmin" routerLink="/admin" (click)="closeMobileMenu()"
+            class="flex items-center gap-3 px-4 py-4 hover:bg-gray-50" [ngClass]="{
+              'text-gray-700 hover:bg-gray-50': isScrolled,
+              'text-white hover:bg-gray-700': !isScrolled
+            }">
+            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z" />
+            </svg>
+            <span class="flex-1">Admin Panel</span>
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+
+          <ng-container *ngIf="!isLoggedIn">
+            <a routerLink="/login" (click)="closeMobileMenu()"
+              class="flex items-center gap-3 px-4 py-4 hover:bg-gray-50" [ngClass]="{
+                'text-gray-700 hover:bg-gray-50': isScrolled,
+                'text-white hover:bg-gray-700': !isScrolled
+              }">
+              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4" />
+              </svg>
+              <span class="flex-1">Login</span>
+            </a>
+            <a routerLink="/register" (click)="closeMobileMenu()"
+              class="flex items-center gap-3 px-4 py-4 hover:bg-gray-50" [ngClass]="{
+                'text-gray-700 hover:bg-gray-50': isScrolled,
+                'text-white hover:bg-gray-700': !isScrolled
+              }">
+              <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              <span class="flex-1">Register</span>
+            </a>
+          </ng-container>
+        </div>
+      </nav>
+
+      <div class="px-4 py-4 border-t" [ngClass]="{
+          'bg-white border-gray-100': isScrolled,
+          'bg-gray-800 border-gray-700': !isScrolled
+        }">
+        <div *ngIf="isLoggedIn" class="mb-3">
+          <button (click)="logout(); closeMobileMenu()"
+            class="w-full bg-red-600 text-white px-4 py-3 rounded-full font-semibold shadow-xl hover:bg-red-700 transition">
+            Logout
+          </button>
+        </div>
+        <div *ngIf="!isLoggedIn" class="space-y-3">
+          <a routerLink="/login" (click)="closeMobileMenu()"
+            class="block w-full text-center px-4 py-3 border rounded-full font-semibold shadow-md transition" [ngClass]="{
+              'text-emerald-600 bg-white border-gray-300 hover:bg-gray-50': isScrolled,
+              'text-white bg-transparent border-white/30 hover:bg-white/10': !isScrolled
+            }">Login</a>
+
+          <a routerLink="/register" (click)="closeMobileMenu()"
+            class="block w-full text-center px-4 py-3 rounded-full font-semibold shadow-xl transition" [ngClass]="{
+              'bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white': true
+            }">Register</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

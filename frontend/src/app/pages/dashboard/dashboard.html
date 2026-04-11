@@ -1,0 +1,161 @@
+<style>
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fade-in {
+    animation: fadeIn 0.8s ease-out;
+  }
+
+  .fade-in-delay {
+    animation: fadeIn 0.8s ease-out 0.2s backwards;
+  }
+
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(34, 197, 94, 0.1), 0 10px 10px -5px rgba(34, 197, 94, 0.04);
+  }
+</style>
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-green-50/30">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Welcome Section -->
+    <div class="fade-in mb-12">
+      <div class="bg-white rounded-3xl shadow-lg border border-gray-200 overflow-hidden">
+        <div class="bg-gradient-to-r from-green-800 to-emerald-800 px-8 py-12 sm:px-12 sm:py-16">
+          <div class="max-w-3xl">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
+              Welcome back, <span class="text-yellow-300 font-serif italic tracking-wide drop-shadow-sm">{{ name
+                }}</span>
+            </h1>
+            <p class="text-xl text-green-50 font-medium">
+              Ready to manage your supply chain today?
+            </p>
+          </div>
+        </div>
+        <!-- Role Badge Section -->
+        <div class="px-8 py-8 sm:px-12 bg-gray-50 border-t border-gray-200">
+          <div class="flex items-center justify-between flex-wrap gap-4">
+            <div>
+              <p class="text-sm text-gray-500 uppercase tracking-wider font-semibold mb-2">
+                Current Role
+              </p>
+              <div class="inline-flex items-center gap-3 px-6 py-3 bg-green-100 border-2 border-green-200 rounded-full">
+                <span class="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></span>
+                <span class="text-green-900 font-bold text-lg">{{ role }}</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 text-sm">
+              <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span class="text-green-600 font-semibold">Online</span>
+              <span class="text-gray-400">•</span> <span class="text-gray-500">FarmChainX</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Cards Grid -->
+    <div class="fade-in-delay">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Quick Actions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+
+
+
+      </div>
+
+      <!-- Dynamic Role-Based Panel Section (Full Width) -->
+      <div *ngIf="panelConfig" class="mb-8">
+        <a [routerLink]="panelConfig.route"
+          class="block card-hover bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl shadow-xl border-2 border-green-400 p-8 group">
+          <div class="flex items-center justify-between">
+            <div class="flex items-start gap-5">
+              <div
+                class="flex-shrink-0 w-16 h-16 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-3xl font-black text-white mb-2 group-hover:text-green-50 transition-colors">
+                  {{ panelConfig.label }}
+                </h3>
+                <p class="text-green-100 font-semibold text-lg flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clip-rule="evenodd" />
+                  </svg>
+                  {{ panelConfig.subtitle }}
+                </p>
+              </div>
+            </div>
+            <div class="flex-shrink-0">
+              <svg class="w-8 h-8 text-white group-hover:translate-x-2 transition-transform" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Info Cards -->
+    <div class="fade-in-delay mt-12">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
+          <div class="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-full mb-4">
+            <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd" />
+            </svg>
+          </div>
+          <h4 class="font-bold text-gray-900 mb-1">Secure</h4>
+          <p class="text-sm text-gray-600">End-to-end encryption</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
+          <div class="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-full mb-4">
+            <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+            </svg>
+          </div>
+          <h4 class="font-bold text-gray-900 mb-1">Database</h4>
+          <p class="text-sm text-gray-600">Transparent tracking</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
+          <div class="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-full mb-4">
+            <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd" />
+            </svg>
+          </div>
+          <h4 class="font-bold text-gray-900 mb-1">Verified</h4>
+          <p class="text-sm text-gray-600">Trusted by thousands</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-12 text-center">
+      <p class="text-sm text-gray-500">© 2025 FarmChainX • Transparent Food Supply Chain</p>
+    </div>
+  </div>
+</div>

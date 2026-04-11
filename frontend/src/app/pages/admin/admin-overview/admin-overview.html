@@ -1,0 +1,102 @@
+<div class="max-w-7xl mx-auto p-6 sm:p-8">
+  <div class="flex justify-between items-center mb-8 border-b border-gray-200 pb-6">
+    <div>
+      <h1
+        class="text-4xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent flex items-center gap-2">
+        <span class="text-4xl">📊</span> System Overview
+      </h1>
+      <p class="text-gray-600 mt-2 font-medium">Complete platform analytics and statistics</p>
+    </div>
+    <div class="flex items-center space-x-4">
+      <span *ngIf="lastUpdated" class="text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full font-semibold">
+        Last updated: {{ lastUpdated | date : 'shortTime' }}
+      </span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
+    <div
+      class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 to-purple-700 p-1 shadow-2xl transform hover:scale-105 transition-all duration-500">
+      <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></div>
+      <div class="relative bg-slate-900/90 backdrop-blur-xl rounded-3xl p-8">
+        <h3 class="text-indigo-300 text-lg font-semibold">Total Users</h3>
+        <p class="text-6xl font-black mt-4 text-white">{{ data?.totalUsers || 0 }}</p>
+        <p class="text-indigo-400 mt-2 text-md">Active accounts</p>
+      </div>
+    </div>
+
+    <div
+      class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-600 to-teal-700 p-1 shadow-2xl transform hover:scale-105 transition-all duration-500">
+      <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></div>
+      <div class="relative bg-slate-900/90 backdrop-blur-xl rounded-3xl p-8">
+        <h3 class="text-emerald-300 text-lg font-semibold">Total Products</h3>
+        <p class="text-6xl font-black mt-4 text-white">{{ data?.totalProducts || 0 }}</p>
+        <p class="text-emerald-400 mt-2 text-md">In supply chain</p>
+      </div>
+    </div>
+
+    <div
+      class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 to-cyan-700 p-1 shadow-2xl transform hover:scale-105 transition-all duration-500">
+      <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></div>
+      <div class="relative bg-slate-900/90 backdrop-blur-xl rounded-3xl p-8">
+        <h3 class="text-blue-300 text-lg font-semibold">Supply Logs</h3>
+        <p class="text-6xl font-black mt-4 text-white">{{ data?.totalLogs || 0 }}</p>
+        <p class="text-blue-400 mt-2 text-md">Database entries</p>
+      </div>
+    </div>
+
+    <div
+      class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-600 to-pink-700 p-1 shadow-2xl transform hover:scale-105 transition-all duration-500">
+      <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></div>
+      <div class="relative bg-slate-900/90 backdrop-blur-xl rounded-3xl p-8">
+        <h3 class="text-purple-300 text-lg font-semibold">Feedbacks</h3>
+        <p class="text-6xl font-black mt-4 text-white">{{ data?.totalFeedbacks || 0 }}</p>
+        <p class="text-purple-400 mt-2 text-md">Consumer reviews</p>
+      </div>
+    </div>
+
+    <div
+      class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-yellow-600 to-orange-700 p-1 shadow-2xl transform hover:scale-105 transition-all duration-500">
+      <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></div>
+      <div class="relative bg-slate-900/90 backdrop-blur-xl rounded-3xl p-10">
+        <h3 class="text-yellow-300 text-lg font-semibold">Sales Volume</h3>
+        <p class="text-4xl font-black mt-6 text-white">
+          {{ formatCurrency(data?.salesVolume) }}
+        </p>
+        <p class="text-yellow-400 mt-2 text-md">Revenue this month</p>
+      </div>
+    </div>
+
+    <div
+      class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-red-600 to-rose-700 p-1 shadow-2xl transform hover:scale-105 transition-all duration-500">
+      <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></div>
+      <div class="relative bg-slate-900/90 backdrop-blur-xl rounded-3xl p-9">
+        <h3 class="text-red-300 text-lg font-semibold">Pending Orders</h3>
+        <p class="text-6xl font-black mt-4 text-white">{{ data?.pendingOrders || 0 }}</p>
+        <p class="text-red-400 mt-2 text-md">Awaiting processing</p>
+      </div>
+    </div>
+
+    <div
+      class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-lime-600 to-green-700 p-1 shadow-2xl transform hover:scale-105 transition-all duration-500">
+      <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></div>
+      <div class="relative bg-slate-900/90 backdrop-blur-xl rounded-3xl p-9">
+        <h3 class="text-lime-300 text-lg font-semibold">New Users Today</h3>
+        <p class="text-6xl font-black mt-4 text-white">{{ data?.newUsersToday || 0 }}</p>
+        <p class="text-lime-400 mt-2 text-md">24-hour acquisition</p>
+      </div>
+    </div>
+
+    <div
+      class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-fuchsia-600 to-pink-600 p-1 shadow-2xl transform hover:scale-105 transition-all duration-500">
+      <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></div>
+      <div class="relative bg-slate-900/90 backdrop-blur-xl rounded-3xl p-9">
+        <h3 class="text-fuchsia-300 text-lg font-semibold">Average Rating</h3>
+        <p class="text-6xl font-black mt-4 text-white">
+          {{ formatRating(data?.averageRating) }}
+        </p>
+        <p class="text-fuchsia-400 mt-2 text-md">Overall product score</p>
+      </div>
+    </div>
+  </div>
+</div>

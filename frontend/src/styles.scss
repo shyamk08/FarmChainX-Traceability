@@ -1,0 +1,45 @@
+
+@use "tailwindcss";
+
+:root { --app-bg: #f8fafc; }
+html.dark { --app-bg: #0f172a; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  background-color: transparent !important;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+app-root {
+  display: block;
+  min-height: 100dvh;
+}
+
+
+
+@keyframes blob {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33%      { transform: translate(30px, -50px) scale(1.1); }
+  66%      { transform: translate(-20px, 40px) scale(0.9); }
+}
+.animate-blob { animation: blob 20s infinite; }
+.animation-delay-2000 { animation-delay: 2s; }
+.animation-delay-4000 { animation-delay: 4s; }
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.25);
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); background-clip: content-box; }

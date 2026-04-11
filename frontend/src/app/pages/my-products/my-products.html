@@ -1,0 +1,219 @@
+<div class="min-h-screen bg-gray-50/50">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+    <!-- Page Header -->
+    <div class="mb-10 lg:mb-14">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <div>
+          <h2 class="text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight mb-3">
+            My Products
+          </h2>
+          <p class="text-lg text-gray-500 max-w-2xl">
+            Manage your verified agricultural products and track their journey on the blockchain.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-4">
+          <!-- Total Products Widget -->
+          <div
+            class="bg-white rounded-xl shadow-sm border border-gray-100 px-6 py-4 min-w-[160px] flex flex-col justify-center">
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Total Uploads</p>
+            <div class="flex items-baseline gap-2">
+              <span class="text-3xl font-bold text-gray-900">{{ totalItems || 0 }}</span>
+              <span class="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Items</span>
+            </div>
+          </div>
+
+          <!-- Verified Widget -->
+          <div
+            class="bg-white rounded-xl shadow-sm border border-gray-100 px-6 py-4 min-w-[160px] flex flex-col justify-center">
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Verified Status</p>
+            <div class="flex items-baseline gap-2">
+              <span class="text-3xl font-bold text-emerald-600">{{ products.length }}</span>
+              <span class="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex flex-col items-center justify-center py-24">
+      <div class="relative w-20 h-20">
+        <div class="absolute inset-0 border-4 border-emerald-100 rounded-full"></div>
+        <div class="absolute inset-0 border-4 border-emerald-500 rounded-full border-t-transparent animate-spin"></div>
+        <div class="absolute inset-0 flex items-center justify-center text-3xl animate-pulse">🌾</div>
+      </div>
+      <p class="mt-8 text-lg font-medium text-gray-600">Retrieving your products...</p>
+    </div>
+
+    <!-- Retry Error State -->
+    <div *ngIf="retryMessage"
+      class="mb-8 rounded-xl bg-amber-50 border border-amber-200 p-4 flex items-center gap-4 animate-fade-in">
+      <div class="flex-shrink-0 w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center text-xl">⚠️</div>
+      <p class="text-amber-800 font-medium">{{ retryMessage }}</p>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && products.length === 0"
+      class="bg-white rounded-2xl shadow-sm border border-dashed border-gray-300 p-16 text-center">
+      <div class="max-w-md mx-auto">
+        <div class="w-20 h-20 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-inner">
+          <span class="text-4xl grayscale opacity-60">📦</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">No Products Yet</h3>
+        <p class="text-gray-500 mb-8">Register your first harvest to start building your blockchain-verified history.
+        </p>
+        <button routerLink="/upload"
+          class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors shadow-lg shadow-emerald-200">
+          Register New Product
+        </button>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div *ngIf="!loading && products.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div *ngFor="let p of products" [attr.data-product-id]="p.id"
+        class="bg-white rounded-2xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 overflow-hidden transition-all duration-300 hover:-translate-y-1 group">
+        <!-- Card Image Header -->
+        <div class="relative h-56 bg-gradient-to-br from-emerald-50 to-teal-50 overflow-hidden group">
+          <img *ngIf="p.imagePath" [src]="getImageUrl(p.imagePath)" [alt]="p.cropName"
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+          <div *ngIf="!p.imagePath" class="w-full h-full flex items-center justify-center">
+            <span
+              class="text-8xl drop-shadow-sm filter grayscale-[0.2] group-hover:grayscale-0 transition-all duration-300 transform group-hover:scale-110">{{
+              getCropEmoji(p.cropName) }}</span>
+          </div>
+
+          <!-- Badges Overlay -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60"></div>
+
+          <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
+            <div
+              class="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg shadow-sm border border-white/50 flex flex-col items-center min-w-[60px]">
+              <span class="text-xs font-bold text-gray-400 uppercase tracking-tight">Grade</span>
+              <span class="text-lg font-black text-emerald-600 leading-none">{{ p.qualityGrade || 'A+' }}</span>
+            </div>
+            <div
+              class="bg-emerald-600/90 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg shadow-sm text-xs font-bold flex items-center gap-1.5 border border-emerald-500/50">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>Verified</span>
+            </div>
+          </div>
+
+          <!-- Bottom Image Info -->
+          <div class="absolute bottom-4 left-4 text-white">
+            <h3 class="text-2xl font-bold shadow-black drop-shadow-md tracking-tight">{{ p.cropName | titlecase }}</h3>
+            <p class="text-sm font-medium text-emerald-100 drop-shadow-md">Harvested {{ formatDate(p.harvestDate) }}</p>
+          </div>
+        </div>
+
+        <!-- Card Body -->
+        <div class="p-6">
+          <!-- Quick Stats Row -->
+          <div class="flex items-center justify-between py-2 mb-4 border-b border-gray-100">
+            <div>
+              <p class="text-[10px] uppercase tracking-wider font-semibold text-gray-400">Product ID</p>
+              <p class="text-sm font-mono font-medium text-gray-600">#{{ p.id }}</p>
+            </div>
+            <div class="text-right">
+              <p class="text-[10px] uppercase tracking-wider font-semibold text-gray-400">Registered By</p>
+              <p class="text-sm font-medium text-gray-800">{{ p.farmer?.name || 'You' }}</p>
+            </div>
+          </div>
+
+          <!-- QR Section -->
+          <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 mb-5 relative group/qr">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold text-gray-500 uppercase flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                </svg>
+                Digital Passport
+              </span>
+              <span *ngIf="p.qrCodePath"
+                class="text-[10px] font-bold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-200">Active</span>
+            </div>
+
+            <!-- QR Display -->
+            <div *ngIf="p.qrCodePath" class="flex flex-col items-center justify-center py-2">
+              <div
+                class="p-2 bg-white rounded-lg shadow-sm border border-gray-200 mb-2 hover:scale-105 transition-transform cursor-pointer"
+                (click)="viewQr(p.qrCodePath)">
+                <img [src]="getQrUrl(p.qrCodePath)" alt="QR Code"
+                  class="w-24 h-24 object-contain opacity-90 hover:opacity-100" />
+              </div>
+              <p class="text-[10px] text-gray-400 text-center">Scan for provenance history</p>
+            </div>
+
+            <!-- Empty QR State -->
+            <div *ngIf="!p.qrCodePath" class="flex flex-col items-center justify-center py-6 text-center">
+              <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center mb-2 text-gray-400">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <p class="text-xs text-gray-500 font-medium">Passport not generated</p>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="grid grid-cols-1 gap-2">
+            <button *ngIf="!p.qrCodePath" (click)="generateQr(p.id); $event.preventDefault(); $event.stopPropagation()"
+              class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-900 hover:bg-black text-white text-sm font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl focus:ring-2 focus:ring-gray-800 focus:ring-offset-2">
+              <span class="text-lg">⚡</span> Create Digital Passport
+            </button>
+
+            <div *ngIf="p.qrCodePath" class="grid grid-cols-2 gap-3">
+              <button (click)="downloadQr(p.id); $event.preventDefault()"
+                class="flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-sm font-semibold rounded-xl transition-colors border border-emerald-200">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Save
+              </button>
+              <button (click)="viewQr(p.qrCodePath); $event.preventDefault()"
+                class="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold rounded-xl transition-colors border border-gray-200">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                View
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="!loading && totalPages > 1"
+      class="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-gray-200 pt-8">
+      <button (click)="prevPage()" [disabled]="page === 0"
+        class="flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-50 hover:border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Previous
+      </button>
+
+      <span class="text-sm font-medium text-gray-500">
+        Page <span class="text-gray-900">{{ page + 1 }}</span> of <span class="text-gray-900">{{ totalPages }}</span>
+      </span>
+
+      <button (click)="nextPage()" [disabled]="page >= totalPages - 1"
+        class="flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-50 hover:border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm">
+        Next
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+  </main>
+</div>

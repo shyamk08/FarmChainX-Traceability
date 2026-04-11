@@ -1,0 +1,86 @@
+<div class="flex h-screen bg-slate-100 overflow-hidden">
+  <!-- Desktop sidebar -->
+  <app-consumer-sidebar class="hidden lg:flex"></app-consumer-sidebar>
+
+  <div class="flex-1 flex flex-col overflow-y-auto">
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
+      <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-4">
+            <button (click)="toggleSidebar()"
+              class="p-2 rounded-xl text-slate-700 hover:bg-slate-200 transition lg:hidden">
+              <!-- hamburger -->
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                </path>
+              </svg>
+            </button>
+
+            <div>
+              <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+                Consumer Dashboard
+              </h1>
+              <p class="text-sm text-slate-500 mt-1">
+                Welcome back,
+                <span class="font-semibold text-indigo-600">{{ currentConsumerName() }}</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <div
+              class="hidden sm:flex items-center gap-2 bg-emerald-100 px-4 py-2 rounded-full border border-emerald-300">
+              <div class="relative">
+                <div class="w-2.5 h-2.5 bg-emerald-600 rounded-full"></div>
+                <div class="w-2.5 h-2.5 bg-emerald-600 rounded-full absolute inset-0 animate-ping opacity-75"></div>
+              </div>
+              <span class="text-sm font-medium text-emerald-800">Operational</span>
+            </div>
+
+            <button class="relative p-2 rounded-xl text-slate-700 hover:bg-slate-200 transition">
+              <!-- bell -->
+              <!-- <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-4-5.659V5a2 2 0 10-4 0v.341"></path>
+              </svg> 
+              <span
+                class="absolute top-1 right-1 w-2 h-2 bg-red-600 rounded-full ring-2 ring-white"
+              ></span>-->
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+
+    <footer
+      class="sticky bottom-0 z-30 bg-white/90 backdrop-blur-sm border-t border-slate-200 px-4 sm:px-6 lg:px-8 py-3">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-sm text-slate-500">
+          © 2025 <span class="font-semibold text-indigo-600">FarmChainX</span>
+        </p>
+        <div class="flex items-center gap-4 text-sm text-slate-500">
+          <a href="#" class="hover:text-indigo-600 transition">Documentation</a>
+          <span class="text-slate-300">•</span>
+          <a href="#" class="hover:text-indigo-600 transition">Support</a>
+          <span class="text-slate-300">•</span>
+          <a href="#" class="hover:text-indigo-600 transition">Privacy</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- mobile overlay & sidebar -->
+  <div *ngIf="sidebarOpen" class="fixed inset-0 z-50 lg:hidden" (click)="toggleSidebar()">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+
+    <div class="absolute left-0 top-0 h-full w-80 bg-white shadow-2xl transform transition-transform duration-300"
+      (click)="$event.stopPropagation()">
+      <app-consumer-sidebar></app-consumer-sidebar>
+    </div>
+  </div>
+</div>

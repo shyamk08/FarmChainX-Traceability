@@ -1,0 +1,182 @@
+<div class="min-h-screen bg-gray-50 pb-12">
+  <!-- Header -->
+  <div class="bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">Retailer Dashboard</h1>
+          <p class="mt-1 text-gray-500">Store overview and supply chain analytics</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <!-- <button
+            class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors">
+            Export Data
+          </button>
+          <button
+            class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-indigo-700 transition-colors shadow-sm">
+            + New Order
+          </button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <!-- Stat 1 -->
+      <div
+        class="bg-gradient-to-br from-white to-emerald-50 rounded-2xl shadow-lg p-6 border border-emerald-100 relative overflow-hidden group hover:shadow-xl transition-shadow duration-300">
+        <div class="relative z-10">
+          <p class="text-xs font-bold text-emerald-700 uppercase tracking-wider">Inventory Value</p>
+          <p
+            class="text-3xl font-extrabold bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-transparent mt-2">
+            ₹{{ stats.inventoryValue | number }}</p>
+          <p class="text-xs text-emerald-600 mt-2 font-semibold flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
+            ↑ 5% from last week
+          </p>
+        </div>
+        <div class="absolute right-0 bottom-0 text-7xl opacity-10 transform translate-x-4 translate-y-4">💰</div>
+      </div>
+
+      <!-- Stat 2 -->
+      <div
+        class="bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-lg p-6 border border-blue-100 relative overflow-hidden group hover:shadow-xl transition-shadow duration-300">
+        <div class="relative z-10">
+          <p class="text-xs font-bold text-blue-700 uppercase tracking-wider">Open Orders</p>
+          <p
+            class="text-3xl font-extrabold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent mt-2">
+            {{ stats.openPOs }}</p>
+          <p class="text-xs text-blue-600 mt-2 font-semibold">Awaiting delivery</p>
+        </div>
+        <div class="absolute right-0 bottom-0 text-7xl opacity-10 transform translate-x-4 translate-y-4">📋</div>
+      </div>
+
+      <!-- Stat 3 -->
+      <div
+        class="bg-gradient-to-br from-white to-indigo-50 rounded-2xl shadow-lg p-6 border border-indigo-100 relative overflow-hidden group hover:shadow-xl transition-shadow duration-300">
+        <div class="relative z-10">
+          <p class="text-xs font-bold text-indigo-700 uppercase tracking-wider">Incoming Shipments</p>
+          <p
+            class="text-3xl font-extrabold bg-gradient-to-r from-indigo-600 to-indigo-800 bg-clip-text text-transparent mt-2">
+            {{ stats.incomingShipments }}</p>
+          <p class="text-xs text-indigo-600 mt-2 font-semibold">Arriving soon</p>
+        </div>
+        <div class="absolute right-0 bottom-0 text-7xl opacity-10 transform translate-x-4 translate-y-4">🚚</div>
+      </div>
+
+      <!-- Stat 4 -->
+      <div
+        class="bg-gradient-to-br from-white to-red-50 rounded-2xl shadow-lg p-6 border border-red-100 relative overflow-hidden group hover:shadow-xl transition-shadow duration-300">
+        <div class="relative z-10">
+          <p class="text-xs font-bold text-red-700 uppercase tracking-wider">Low Stock Alert</p>
+          <p class="text-3xl font-extrabold text-red-600 mt-2">{{ stats.lowStock }}</p>
+          <p class="text-xs text-red-500 mt-2 font-semibold">Items need reorder</p>
+        </div>
+        <div class="absolute right-0 bottom-0 text-7xl opacity-10 transform translate-x-4 translate-y-4">⚠️</div>
+      </div>
+    </div>
+
+    <!-- Charts & Actions -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+      <!-- Main Chart -->
+      <div
+        class="lg:col-span-2 bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">Sales
+              Trends</h3>
+            <p class="text-sm text-gray-500 mt-1">Last 7 days performance</p>
+          </div>
+          <select class="text-sm border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50">
+            <option>This Week</option>
+            <option>This Month</option>
+          </select>
+        </div>
+        <div class="h-64">
+          <canvas #barChart></canvas>
+        </div>
+      </div>
+
+      <!-- Quick Actions & Pie -->
+      <div class="space-y-6">
+        <div
+          class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow duration-300">
+          <h3 class="font-bold text-gray-900 mb-4 text-lg">Stock Distribution</h3>
+          <div class="h-48 flex justify-center">
+            <canvas #pieChart></canvas>
+          </div>
+        </div>
+
+        <!-- CTA Card -->
+        <div
+          class="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 rounded-2xl p-6 text-white shadow-2xl relative overflow-hidden hover:shadow-emerald-500/50 transition-all duration-300">
+          <div class="relative z-10">
+            <div class="inline-block p-2 bg-white/20 rounded-lg mb-3">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <h3 class="font-extrabold text-xl mb-2">Buy from Distributors</h3>
+            <p class="text-emerald-100 text-sm mb-4 leading-relaxed">Browse wholesale market for certified crops and
+              fresh produce.</p>
+            <a routerLink="/retailer/market"
+              class="inline-flex items-center gap-2 bg-white text-emerald-700 font-bold py-2.5 px-5 rounded-lg hover:bg-emerald-50 transition-colors text-sm shadow-lg">
+              Go to Market
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </a>
+          </div>
+          <div class="absolute right-0 top-0 text-9xl opacity-10 transform translate-x-8 -translate-y-4">🛒</div>
+          <div class="absolute left-0 bottom-0 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Orders Table -->
+    <div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+        <h3 class="font-bold text-gray-700">Recent Purchase Orders</h3>
+        <a href="#" class="text-sm text-indigo-600 font-semibold hover:text-indigo-800">View All</a>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Order ID</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Supplier</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Items
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Amount</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let o of recentOrders" class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ o.id }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ o.supplier }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ o.items }} items</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">₹{{ o.total }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
+                  [ngClass]="statusClass(o.status)">
+                  {{ o.status }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

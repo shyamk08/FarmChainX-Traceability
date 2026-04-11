@@ -1,0 +1,123 @@
+<div class="min-h-screen bg-gray-50 pb-12">
+  <!-- Header -->
+  <div class="bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">Inventory Management</h1>
+          <p class="mt-1 text-gray-500">Track stock levels, valuation, and warehouse locations</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="text-right">
+            <p class="text-sm text-gray-500">Total Asset Value</p>
+            <p class="text-2xl font-bold text-emerald-600">₹{{ totalValue | number }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+
+    <!-- Inventory Table Card -->
+    <div class="bg-white shadow-sm rounded-xl border border-gray-200 overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+        <h3 class="font-semibold text-gray-700">Current Stock Holdings</h3>
+
+        <div class="flex gap-2">
+          <input type="text" placeholder="Search sku, crop..."
+            class="text-sm border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
+          <button
+            class="bg-white border border-gray-300 px-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">Filter</button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Item Details</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Status</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Location</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Valuation</th>
+              <th scope="col" class="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let item of inventoryItems" class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div
+                    class="flex-shrink-0 h-10 w-10 bg-emerald-100 rounded-lg overflow-hidden flex items-center justify-center">
+                    <img *ngIf="item.imagePath" [src]="item.imagePath" class="w-full h-full object-cover">
+                    <span *ngIf="!item.imagePath">📦</span>
+                  </div>
+                  <div class="ml-4">
+                    <div class="text-sm font-bold text-gray-900">{{ item.cropName }}</div>
+                    <div class="text-xs text-gray-500">ID: #{{ item.productId }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span
+                  class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                  In Stock
+                </span>
+                <span class="ml-2 text-xs text-gray-500">{{ item.timestamp | date:'short' }}</span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {{ item.location }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-emerald-600">
+                ₹{{ item.value | number }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <button (click)="goToDispatch(item)"
+                  class="text-emerald-600 hover:text-emerald-900 bg-emerald-50 px-3 py-1 rounded-md transition-colors border border-emerald-200 inline-block cursor-pointer">
+                  Go to Dispatch
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="inventoryItems.length === 0">
+              <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+                No items in inventory. Go to Procurement to buy crops.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <!-- Analytics Summary (Mini) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+      <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl p-6 text-white shadow-lg">
+        <h4 class="font-semibold text-emerald-100">Storage Optimization</h4>
+        <p class="text-2xl font-bold mt-2">87%</p>
+        <p class="text-xs text-emerald-200 mt-1">Warehouse capacity utilized</p>
+      </div>
+      <div class="bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl p-6 text-white shadow-lg">
+        <h4 class="font-semibold text-teal-100">Turnover Rate</h4>
+        <p class="text-2xl font-bold mt-2">12 Days</p>
+        <p class="text-xs text-teal-200 mt-1">Avg time to dispatch</p>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+        <h4 class="font-semibold text-gray-500 uppercase text-xs">Low Stock Alerts</h4>
+        <div class="mt-4 flex items-center gap-3">
+          <div class="w-2 h-2 rounded-full bg-red-500"></div>
+          <p class="text-sm font-medium text-gray-800">Sweet Corn (Below 1000kg)</p>
+        </div>
+        <div class="mt-2 flex items-center gap-3">
+          <div class="w-2 h-2 rounded-full bg-orange-500"></div>
+          <p class="text-sm font-medium text-gray-800">Soybean (Expiring soon)</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

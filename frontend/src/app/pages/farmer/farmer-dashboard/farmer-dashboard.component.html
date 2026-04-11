@@ -1,0 +1,152 @@
+<div class="p-6 space-y-8">
+  <!-- Welcome banner -->
+  <div class="bg-gradient-to-r from-green-600 to-emerald-700 rounded-2xl p-6 text-white shadow">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+      <div>
+        <h2 class="text-2xl font-bold mb-2">AI Predictions Dashboard 🌾</h2>
+        <p class="opacity-90 max-w-2xl">
+          View AI-powered insights and predictions for all your products. Get recommendations on market readiness, storage, and optimal selling windows.
+        </p>
+      </div>
+      <button
+        (click)="loadPredictions()"
+        class="mt-4 md:mt-0 inline-flex items-center bg-white text-green-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 shadow"
+      >
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="flex items-center justify-center py-12">
+    <div class="text-center">
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mb-4"></div>
+      <p class="text-gray-600">Loading predictions...</p>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="bg-red-50 border border-red-200 rounded-lg p-4">
+    <div class="flex items-center">
+      <svg class="w-5 h-5 text-red-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+      </svg>
+      <p class="text-red-800">{{ error }}</p>
+    </div>
+  </div>
+
+  <!-- Predictions List -->
+  <div *ngIf="!loading && !error">
+    <div class="mb-4 flex items-center justify-between">
+      <h3 class="text-xl font-semibold text-gray-900">
+        All Predictions ({{ predictions.length }})
+      </h3>
+    </div>
+
+    <div *ngIf="predictions.length === 0" class="bg-white rounded-lg shadow p-8 text-center">
+      <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+      </svg>
+      <p class="text-gray-600 text-lg mb-2">No predictions yet</p>
+      <p class="text-gray-500">Upload products to get AI predictions and insights.</p>
+    </div>
+
+    <div *ngIf="predictions.length > 0" class="space-y-4">
+      <div
+        *ngFor="let prediction of predictions"
+        class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 border-l-4"
+        [class.border-green-500]="prediction.qualityGrade?.includes('A')"
+        [class.border-blue-500]="prediction.qualityGrade?.includes('B')"
+        [class.border-yellow-500]="prediction.qualityGrade?.includes('C')"
+        [class.border-gray-500]="!prediction.qualityGrade"
+      >
+        <!-- Header -->
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <h4 class="text-xl font-bold text-gray-900">{{ prediction.productName || 'Unknown Product' }}</h4>
+              <span
+                class="px-3 py-1 rounded-full text-sm font-semibold"
+                [ngClass]="getQualityGradeColor(prediction.qualityGrade)"
+              >
+                Grade: {{ prediction.qualityGrade || 'N/A' }}
+              </span>
+            </div>
+            <p class="text-sm text-gray-500">
+              Product ID: {{ prediction.productId }} • Created: {{ formatDate(prediction.createdAt) }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Key Metrics Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div class="bg-gray-50 rounded-lg p-4">
+            <p class="text-sm text-gray-600 mb-1">Quality Score</p>
+            <p class="text-2xl font-bold text-gray-900">{{ prediction.qualityScore || 'N/A' }}</p>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-4">
+            <p class="text-sm text-gray-600 mb-1">Confidence</p>
+            <span
+              class="inline-block px-3 py-1 rounded-full text-sm font-semibold"
+              [ngClass]="getConfidenceColor(prediction.confidence)"
+            >
+              {{ prediction.confidence || 'N/A' }}%
+            </span>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-4">
+            <p class="text-sm text-gray-600 mb-1">Certification</p>
+            <p class="text-lg font-semibold text-gray-900">{{ prediction.certificationEligibility || 'N/A' }}</p>
+          </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="space-y-3">
+          <div *ngIf="prediction.marketReadiness" class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            <div>
+              <p class="font-semibold text-gray-900">Market Readiness</p>
+              <p class="text-gray-600">{{ prediction.marketReadiness }}</p>
+            </div>
+          </div>
+
+          <div *ngIf="prediction.storageRecommendation" class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+            </svg>
+            <div>
+              <p class="font-semibold text-gray-900">Storage Recommendation</p>
+              <p class="text-gray-600">{{ prediction.storageRecommendation }}</p>
+            </div>
+          </div>
+
+          <div *ngIf="prediction.optimalSellingWindow" class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+            </svg>
+            <div>
+              <p class="font-semibold text-gray-900">Optimal Selling Window</p>
+              <p class="text-gray-600">{{ prediction.optimalSellingWindow }}</p>
+            </div>
+          </div>
+
+          <div *ngIf="prediction.priceEstimate" class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.461 1.276V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.461-1.276V5z" clip-rule="evenodd" />
+            </svg>
+            <div>
+              <p class="font-semibold text-gray-900">Price Estimate</p>
+              <p class="text-gray-600">{{ prediction.priceEstimate }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

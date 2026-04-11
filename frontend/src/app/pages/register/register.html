@@ -1,0 +1,172 @@
+<style>
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .valid {
+    color: #22c55e;
+    font-weight: 600;
+  }
+
+  .invalid {
+    color: #ef4444;
+  }
+
+  .input-focus-green:focus {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+    outline: none;
+  }
+
+  .icon-left {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .pl-icon {
+    padding-left: 2.5rem;
+  }
+</style>
+
+<div class="min-h-screen bg-gradient-to-br from-slate-800 via-black-400 to-green-200">
+  <div class="flex items-center justify-center min-h-screen px-4 py-12">
+    <div class="w-full max-w-lg fade-in">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-white mb-2">
+          Farm<span class="text-green-500">ChainX</span>
+        </h1>
+        <p class="text-gray-300">Create your account to get started</p>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+        <div class="mb-6">
+          <h2 class="text-2xl font-bold text-gray-900 mb-1">Sign Up</h2>
+          <p class="text-sm text-gray-500">Fill in your details below</p>
+        </div>
+
+        <form (ngSubmit)="submit()" #f="ngForm" autocomplete="off" class="space-y-5">
+          <!-- NAME -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2"> Full Name </label>
+            <div class="relative">
+              <svg class="w-5 h-5 text-gray-400 icon-left" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              <input class="input-focus-green w-full pl-icon pr-4 py-3 border-2 border-gray-300 rounded-lg" name="name"
+                placeholder="Enter your full name" [(ngModel)]="name" #nameModel="ngModel" required />
+            </div>
+          </div>
+
+          <!-- EMAIL -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2"> Email Address </label>
+            <div class="relative">
+              <svg class="w-5 h-5 text-gray-400 icon-left" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <input class="input-focus-green w-full pl-icon pr-4 py-3 border-2 border-gray-300 rounded-lg" name="email"
+                type="email" placeholder="you@example.com" [(ngModel)]="email" required />
+            </div>
+            <p *ngIf="email && !isEmailValid()" class="text-sm invalid mt-1">
+              Please enter a valid email.
+            </p>
+          </div>
+
+          <!-- PASSWORD -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2"> Password </label>
+            <div class="relative">
+              <svg class="w-5 h-5 text-gray-400 icon-left" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              <input class="input-focus-green w-full pl-icon pr-4 py-3 border-2 border-gray-300 rounded-lg"
+                name="password" type="password" placeholder="Minimum 8 characters" [(ngModel)]="password"
+                (ngModelChange)="checkPassword()" required />
+            </div>
+
+            <ul class="mt-3 text-sm space-y-1">
+              <li [ngClass]="passwordValid.minLength ? 'valid' : 'invalid'">
+                • Minimum 8 characters
+              </li>
+              <li [ngClass]="passwordValid.uppercase ? 'valid' : 'invalid'">
+                • At least one uppercase letter (A–Z)
+              </li>
+              <li [ngClass]="passwordValid.number ? 'valid' : 'invalid'">• At least one number</li>
+              <li [ngClass]="passwordValid.specialChar ? 'valid' : 'invalid'">
+                • At least one special character
+              </li>
+            </ul>
+          </div>
+
+          <!-- CONFIRM PASSWORD -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2"> Confirm Password </label>
+            <input class="input-focus-green w-full pr-4 py-3 border-2 border-gray-300 rounded-lg" name="confirmPassword"
+              type="password" placeholder="Re-enter your password" [(ngModel)]="confirmPassword"
+              (ngModelChange)="checkConfirmPassword()" required />
+
+            <p class="mt-2 text-sm" [ngClass]="passwordsMatch ? 'valid' : confirmPassword ? 'invalid' : ''">
+              {{
+              passwordsMatch
+              ? 'Passwords match ✅'
+              : confirmPassword
+              ? 'Passwords do not match ❌'
+              : ''
+              }}
+            </p>
+          </div>
+
+          <!-- ROLE -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2"> Select Your Role </label>
+            <select name="role" [(ngModel)]="role" required
+              class="input-focus-green w-full py-3 border-2 border-gray-300 rounded-lg">
+              <option value="" disabled selected>Choose your role</option>
+              <option value="FARMER">🌾 Farmer</option>
+              <option value="CONSUMER">🛒 Consumer</option>
+              <option value="DISTRIBUTOR">🚚 Distributor</option>
+              <option value="RETAILER">🏪 Retailer</option>
+            </select>
+          </div>
+
+          <!-- BUTTON -->
+          <button type="submit" [disabled]="!isFormValid() || submitting"
+            class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+            {{ submitting ? 'Creating account...' : 'Create Account' }}
+          </button>
+        </form>
+
+        <div class="text-center mt-6">
+          <p class="text-sm text-gray-600">
+            Already have an account?
+            <a routerLink="/login"
+              class="block w-1/2 mx-auto bg-emerald-800 hover:bg-emerald-700 text-white font-semibold text-base py-3.5 rounded-lg shadow-lg transform hover:scale-[1.02] transition-all duration-200 text-center no-underline">
+              Sign in</a>
+          </p>
+        </div>
+      </div>
+
+      <p class="text-xs text-center text-gray-700 mt-6">
+        © 2025 FarmChainX. Transparent food supply chain.
+      </p>
+    </div>
+  </div>
+</div>

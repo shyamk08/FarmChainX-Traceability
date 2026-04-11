@@ -1,0 +1,19 @@
+<div class="bg-white p-6 rounded-xl shadow max-w-4xl">
+  <h2 class="text-2xl font-bold mb-6">Procurement Detail</h2>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+    <div><b>Farmer:</b> {{ procurement.farmer }}</div>
+    <div><b>Crop:</b> {{ procurement.crop }}</div>
+    <div><b>Quantity:</b> {{ procurement.quantity }}</div>
+    <div><b>Price / Ton:</b> {{ procurement.pricePerTon }}</div>
+    <div><b>Total Amount:</b> {{ procurement.totalAmount }}</div>
+    <div><b>Warehouse:</b> {{ procurement.warehouse }}</div>
+    <div>
+      <b>Status:</b>
+      <span class="px-2 py-1 rounded text-xs bg-green-100 text-green-700">
+        {{ procurement.status }}
+      </span>
+    </div>
+    <div><b>Date:</b> {{ procurement.date }}</div>
+  </div>
+</div>

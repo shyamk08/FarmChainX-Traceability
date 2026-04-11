@@ -1,0 +1,149 @@
+<div class="min-h-screen bg-gray-50 pb-12">
+  <!-- Header -->
+  <div class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center">
+      <h1 class="text-3xl font-bold">Product Verification</h1>
+      <p class="mt-2 text-emerald-100">Trace your food's journey from the farm to your table.</p>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
+
+    <!-- Input Card -->
+    <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+      <label class="block text-sm font-bold text-gray-700 mb-2">Enter Batch ID or Scan QR Code</label>
+      <div class="flex gap-4">
+        <input [(ngModel)]="codeInput" [disabled]="loading" type="text" placeholder="e.g. BATCH-2025-8821"
+          class="flex-grow border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 text-lg py-3">
+        <button (click)="verifyManual()" [disabled]="loading || !codeInput"
+          class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          <span *ngIf="!loading">Verify</span>
+          <span *ngIf="loading">Checking...</span>
+        </button>
+      </div>
+      <div class="mt-4 text-center">
+        <button (click)="scanQR()"
+          class="text-emerald-600 font-semibold text-sm hover:underline flex items-center justify-center gap-1 mx-auto">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Switch to Camera Code Scanner
+        </button>
+      </div>
+    </div>
+
+    <!-- Result Section -->
+    <div *ngIf="productData" class="space-y-8 animate-fade-in-up">
+
+      <!-- Product Summary -->
+      <div
+        class="bg-white rounded-2xl p-6 shadow-sm border border-emerald-100 flex flex-col md:flex-row items-center gap-6">
+        <div
+          class="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center overflow-hidden border-4 border-white shadow">
+          <img *ngIf="productData.imagePath" [src]="productData.imagePath" class="w-full h-full object-cover">
+          <span *ngIf="!productData.imagePath">🌾</span>
+        </div>
+        <div class="text-center md:text-left flex-grow">
+          <div class="flex items-center justify-center md:justify-start gap-2">
+            <h2 class="text-2xl font-bold text-gray-900">{{ productData.cropName }}</h2>
+            <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-1 rounded-full">AUTHENTIC</span>
+          </div>
+          <p class="text-gray-500 text-sm mt-1">UUID: {{ productData.publicUuid }}</p>
+          <div class="flex gap-4 mt-3 text-sm flex-wrap justify-center md:justify-start">
+            <span class="text-gray-600">🌍 Origin: <b>{{ productData.originLocation }}</b></span>
+            <span class="text-gray-600">💰 Price: <b>₹{{ productData.price }}</b></span>
+            <span class="text-gray-600">⭐ Quality: <b>{{ productData.qualityGrade || 'N/A' }}</b></span>
+          </div>
+        </div>
+
+        <!-- AI Score Card -->
+        <div
+          class="bg-gradient-to-br from-indigo-50 to-blue-50 p-4 rounded-xl border border-blue-100 text-center min-w-[200px]">
+          <p class="text-xs font-bold text-blue-600 uppercase tracking-wide">AI Trust Score</p>
+          <div class="text-4xl font-black text-blue-900 mt-2">{{ aiTrustScore }}%</div>
+          <p class="text-[10px] text-blue-500 mt-1 leading-tight">{{ aiAnalysis }}</p>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="relative pl-8 border-l-2 border-slate-200 space-y-12">
+        <div *ngFor="let step of timeline" class="relative group">
+          <div
+            class="absolute -left-[41px] w-10 h-10 rounded-full border-4 border-white shadow-sm flex items-center justify-center text-xl bg-slate-100 z-10 transition-transform group-hover:scale-110"
+            [ngClass]="{'bg-emerald-100 ring-2 ring-emerald-500': step.status === 'completed' || step.status === 'active'}">
+            {{ step.icon }}
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex justify-between items-start mb-2">
+              <div>
+                <h4 class="font-bold text-slate-800">{{ step.title }}</h4>
+                <p class="text-sm text-slate-500">{{ step.role }} • {{ step.actor }}</p>
+              </div>
+              <span class="text-xs font-mono text-slate-400 bg-slate-50 px-2 py-1 rounded">{{ step.date | date:'medium'
+                }}</span>
+            </div>
+
+            <div class="flex items-center gap-2 text-sm text-slate-600 mt-2">
+              <span class="text-slate-400">📍</span> {{ step.location }}
+            </div>
+
+            <div class="mt-3 text-xs text-emerald-600 bg-emerald-50 inline-block px-3 py-1.5 rounded-full font-medium">
+              {{ step.details }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="timeline.length === 0 && !loading" class="text-center py-8 text-gray-500">
+        No tracking history available yet.
+      </div>
+
+    </div>
+
+
+    <!-- Feedback Section -->
+    <div class="mt-12 bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+      <h3 class="text-xl font-bold text-gray-900 mb-4">Rate this Product</h3>
+
+      <div *ngIf="!feedbackSubmitted">
+        <div class="flex justify-center gap-2 text-3xl mb-6">
+          <button (click)="setRating(1)" [class.grayscale]="rating < 1"
+            class="hover:scale-110 transition-transform">⭐</button>
+          <button (click)="setRating(2)" [class.grayscale]="rating < 2"
+            class="hover:scale-110 transition-transform">⭐</button>
+          <button (click)="setRating(3)" [class.grayscale]="rating < 3"
+            class="hover:scale-110 transition-transform">⭐</button>
+          <button (click)="setRating(4)" [class.grayscale]="rating < 4"
+            class="hover:scale-110 transition-transform">⭐</button>
+          <button (click)="setRating(5)" [class.grayscale]="rating < 5"
+            class="hover:scale-110 transition-transform">⭐</button>
+        </div>
+
+        <textarea [(ngModel)]="feedbackText" rows="3" placeholder="Is the produce fresh? Any packaging issues?"
+          class="w-full rounded-xl border-gray-200 focus:ring-emerald-500 focus:border-emerald-500 resize-none mb-4"></textarea>
+
+        <button (click)="submitFeedback()" [disabled]="rating === 0"
+          class="w-full bg-gray-900 text-white font-bold py-3 rounded-xl hover:bg-black transition-colors disabled:opacity-50">
+          Submit Feedback
+        </button>
+      </div>
+
+      <div *ngIf="feedbackSubmitted" class="text-center py-6">
+        <div class="text-4xl mb-4">🙌</div>
+        <h4 class="font-bold text-gray-900">Thanks for your feedback!</h4>
+        <p class="text-gray-500">Your input helps farmers improve quality.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="text-center py-8 text-red-500 bg-red-50 rounded-xl mt-8">
+    <p class="font-bold">{{ error }}</p>
+  </div>
+
+</div>

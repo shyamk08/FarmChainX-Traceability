@@ -1,0 +1,129 @@
+<div class="min-h-screen bg-gray-50 pb-12">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="flex items-center gap-4">
+                <button (click)="cancel()" class="p-2 hover:bg-white/10 rounded-lg transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <div class="flex-1">
+                    <h1 class="text-3xl font-bold">Select Retailer for Dispatch</h1>
+                    <p class="mt-2 text-emerald-100">Choose a retailer to receive this product</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+
+        <!-- Product Being Dispatched -->
+        <div *ngIf="productToDispatch" class="bg-white shadow-sm rounded-xl border border-gray-200 p-6 mb-8">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Product to Dispatch</h2>
+            <div class="flex items-center gap-4">
+                <div
+                    class="flex-shrink-0 h-16 w-16 bg-emerald-100 rounded-lg overflow-hidden flex items-center justify-center">
+                    <img *ngIf="productToDispatch.imagePath" [src]="productToDispatch.imagePath"
+                        class="w-full h-full object-cover">
+                    <span *ngIf="!productToDispatch.imagePath" class="text-2xl">📦</span>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-xl font-bold text-gray-900">{{ productToDispatch.cropName }}</h3>
+                    <p class="text-sm text-gray-500">Product ID: #{{ productToDispatch.productId }}</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm text-gray-500">Value</p>
+                    <p class="text-2xl font-bold text-emerald-600">₹{{ productToDispatch.value || 0 | number }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="flex justify-center py-20">
+            <div class="animate-spin rounded-full h-12 w-12 border-4 border-emerald-500 border-t-transparent"></div>
+        </div>
+
+        <!-- Retailers List -->
+        <div *ngIf="!loading" class="bg-white shadow-sm rounded-xl border border-gray-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                <h3 class="font-semibold text-gray-700">Available Retailers</h3>
+                <p class="text-sm text-gray-500 mt-1">Select a retailer to dispatch this product</p>
+            </div>
+
+            <div class="p-6">
+                <!-- Empty State -->
+                <div *ngIf="retailers.length === 0" class="text-center py-12">
+                    <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <p class="text-gray-500 font-medium">No retailers available</p>
+                    <p class="text-sm text-gray-400 mt-1">Please check back later</p>
+                </div>
+
+                <!-- Retailers Grid -->
+                <div *ngIf="retailers.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div *ngFor="let retailer of retailers" (click)="selectRetailer(retailer.id)"
+                        [class.border-emerald-500]="selectedRetailerId === retailer.id"
+                        [class.bg-emerald-50]="selectedRetailerId === retailer.id"
+                        [class.border-gray-200]="selectedRetailerId !== retailer.id"
+                        class="border-2 rounded-xl p-4 cursor-pointer hover:shadow-md transition-all duration-200">
+
+                        <div class="flex items-start gap-3">
+                            <!-- Checkmark -->
+                            <div class="flex-shrink-0 mt-1">
+                                <div *ngIf="selectedRetailerId === retailer.id"
+                                    class="w-6 h-6 bg-emerald-600 rounded-full flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <div *ngIf="selectedRetailerId !== retailer.id"
+                                    class="w-6 h-6 border-2 border-gray-300 rounded-full"></div>
+                            </div>
+
+                            <!-- Retailer Info -->
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-bold text-gray-900 truncate">{{ retailer.name || retailer.username }}
+                                </h4>
+                                <p class="text-sm text-gray-500 truncate">{{ retailer.email }}</p>
+                                <div class="mt-2 flex items-center gap-2">
+                                    <span
+                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        Retailer ID: #{{ retailer.id }}
+                                    </span>
+                                </div>
+                                <p *ngIf="retailer.address" class="text-xs text-gray-400 mt-1 truncate">
+                                    📍 {{ retailer.address }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-8 flex justify-end gap-4">
+            <button (click)="cancel()" [disabled]="dispatching"
+                class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                Cancel
+            </button>
+            <button (click)="dispatchToRetailer()" [disabled]="!selectedRetailerId || dispatching"
+                class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                <svg *ngIf="!dispatching" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <span *ngIf="dispatching"
+                    class="inline-block animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></span>
+                <span>{{ dispatching ? 'Dispatching...' : 'Confirm Dispatch' }}</span>
+            </button>
+        </div>
+
+    </div>
+</div>

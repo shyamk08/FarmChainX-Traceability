@@ -1,0 +1,174 @@
+<div class="space-y-6">
+  <!-- Dispatch Offers Section -->
+  <div class="bg-white p-6 rounded-2xl shadow">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold text-emerald-600">📡 Available Dispatch Offers</h2>
+      <span class="text-sm text-gray-500">From distributors - first come, first served</span>
+    </div>
+
+    <div *ngIf="offersLoading" class="text-center py-4 text-gray-400">Loading offers...</div>
+
+    <div *ngIf="!offersLoading && dispatchOffers.length > 0" class="border rounded-lg overflow-hidden">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-emerald-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Distributor</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Offered At</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr *ngFor="let offer of dispatchOffers" class="hover:bg-emerald-50">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="h-10 w-10 flex-shrink-0 bg-emerald-100 rounded-lg flex items-center justify-center">
+                  <img *ngIf="offer.imagePath" [src]="offer.imagePath" class="h-full w-full object-cover rounded-lg">
+                  <span *ngIf="!offer.imagePath">📦</span>
+                </div>
+                <div class="ml-4">
+                  <div class="text-sm font-medium text-gray-900">{{offer.cropName || 'Unknown Product'}}</div>
+                  <div class="text-xs text-gray-500">{{offer.qualityGrade || 'N/A'}}</div>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              {{offer.distributorName || 'Unknown'}}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              {{offer.location}}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-emerald-600">
+              ₹{{offer.price || 0}}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              {{offer.createdAt | date:'short'}}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <button (click)="acceptOffer(offer)"
+                class="text-white bg-emerald-600 hover:bg-emerald-700 px-4 py-2 rounded-lg transition-colors font-medium shadow-sm">
+                Accept Offer
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="!offersLoading && dispatchOffers.length === 0" class="text-center py-10 text-gray-500">
+      <p>No dispatch offers available at the moment.</p>
+      <p class="text-sm mt-2">Check back later for new products from distributors.</p>
+    </div>
+  </div>
+
+  <!-- Incoming Shipments Section -->
+  <div class="bg-white p-6 rounded-2xl shadow">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold">Incoming Shipments</h2>
+      <span class="text-sm text-gray-500">Items pending your confirmation</span>
+    </div>
+
+    <div *ngIf="loading" class="text-center py-4 text-gray-400">Loading...</div>
+
+    <div *ngIf="!loading && shipments.length > 0; else emptyState" class="border rounded-lg overflow-hidden">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product ID</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">From Distributor
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr *ngFor="let s of shipments">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#{{s.productId}}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{s.createdBy}}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{s.timestamp | date:'medium'}}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+
+              <!-- Default State -->
+              <button *ngIf="verifyingId !== s.productId" (click)="startVerification(s.productId)"
+                class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1 rounded border border-indigo-200 transaction-colors">
+                Verify
+              </button>
+
+              <!-- Verification State -->
+              <div *ngIf="verifyingId === s.productId"
+                class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                (click)="cancelVerification()">
+                <div class="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full mx-4" (click)="$event.stopPropagation()">
+                  <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-lg font-bold text-gray-900">Verify Shipment #{{s.productId}}</h3>
+                    <button (click)="cancelVerification()" class="text-gray-400 hover:text-gray-600">
+                      <span class="sr-only">Close</span>
+                      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-4">
+                    <div class="flex">
+                      <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                            clip-rule="evenodd" />
+                        </svg>
+                      </div>
+                      <div class="ml-3 max-w-full break-words whitespace-normal overflow-hidden">
+                        <h3 class="text-sm font-medium text-blue-800 break-words">
+                          Verification Required
+                        </h3>
+
+                        <div class="mt-2 text-sm text-blue-700 break-words">
+                          <p class="leading-relaxed">
+                            Please inspect the physical goods before confirming receipt on the Database.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="space-y-4 mb-6">
+                    <div class="flex items-center">
+                      <input id="verify-goods" type="checkbox" [(ngModel)]="verificationChecked"
+                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                      <label for="verify-goods" class="ml-2 block text-sm text-gray-900">
+                        I verify that the physical goods have been received.
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="flex justify-end gap-3">
+                    <button (click)="cancelVerification()"
+                      class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                      Cancel
+                    </button>
+                    <button (click)="confirmReceipt(s)" [disabled]="!verificationChecked"
+                      [class.opacity-50]="!verificationChecked"
+                      class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:cursor-not-allowed">
+                      Confirm Digital Receipt
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #emptyState>
+      <div class="text-center py-10 text-gray-500" *ngIf="!loading">
+        <p>No pending shipments found.</p>
+      </div>
+    </ng-template>
+  </div>
+</div>
