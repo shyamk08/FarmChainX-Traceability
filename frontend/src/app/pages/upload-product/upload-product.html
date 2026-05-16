@@ -2,9 +2,9 @@
   <div class="max-w-4xl mx-auto">
     <!-- Header -->
     <div class="text-center mb-8">
-      <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-2">Register New Product</h1>
+      <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-2">{{ 'REGISTER_NEW_PRODUCT' | translate }}</h1>
       <p class="text-slate-600">
-        Add your agricultural product to the blockchain-verified registry
+        {{ 'REGISTER_PRODUCT_DESC' | translate }}
       </p>
     </div>
 
@@ -14,26 +14,26 @@
         <!-- Crop Name -->
         <div>
           <label class="block text-sm font-semibold text-slate-700 mb-2">
-            Crop Name <span class="text-red-500">*</span>
+            {{ 'CROP_NAME' | translate }} <span class="text-red-500">*</span>
           </label>
           <input [(ngModel)]="cropName" name="cropName" required
             class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition"
-            placeholder="e.g., Basmati Rice, Red Onion, Organic Tomato" />
+            [placeholder]="'eg: Paddy, Onion, Tomato' | translate" />
         </div>
 
         <!-- Soil & Pesticides Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-2">Soil Type</label>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ 'SOIL_TYPE' | translate }}</label>
             <input [(ngModel)]="soilType" name="soilType"
               class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition"
-              placeholder="e.g., Loamy, Red Soil, Clay" />
+              [placeholder]="'eg: Sandy Loam, Alluvial, Black Soil' | translate" />
           </div>
           <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-2">Pesticides Used</label>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ 'PESTICIDES_USED' | translate }}</label>
             <input [(ngModel)]="pesticides" name="pesticides"
               class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition"
-              placeholder="e.g., None, Neem Oil, Organic" />
+              [placeholder]="'eg: Glyphosate, Neem Oil, etc.' | translate" />
           </div>
         </div>
 
@@ -41,32 +41,32 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="md:col-span-1">
             <label class="block text-sm font-semibold text-slate-700 mb-2">
-              Expected Price (₹/kg) <span class="text-red-500">*</span>
+              {{ 'EXPECTED_PRICE' | translate }} <span class="text-red-500">*</span>
             </label>
             <input type="number" [(ngModel)]="price" name="price" required min="1"
               class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition"
-              placeholder="e.g., 150" />
+              [placeholder]="'eg: 500 INR' | translate" />
           </div>
           
           <div class="md:col-span-1">
             <label class="block text-sm font-semibold text-slate-700 mb-2">
-              Quantity <span class="text-red-500">*</span>
+              {{ 'QUANTITY' | translate }} <span class="text-red-500">*</span>
             </label>
             <input type="number" [(ngModel)]="quantity" name="quantity" required min="1"
               class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition"
-              placeholder="e.g., 1000" />
+              [placeholder]="'eg: 100' | translate" />
           </div>
           
           <div class="md:col-span-1">
             <label class="block text-sm font-semibold text-slate-700 mb-2">
-              Unit <span class="text-red-500">*</span>
+              {{ 'UNIT' | translate }} <span class="text-red-500">*</span>
             </label>
             <select [(ngModel)]="quantityUnit" name="quantityUnit" required
               class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition">
-              <option value="kg">Kilograms (kg)</option>
-              <option value="units">Units</option>
-              <option value="tons">Tons</option>
-              <option value="quintals">Quintals</option>
+              <option value="kg">{{ 'KILOGRAMS' | translate }}</option>
+              <option value="units">{{ 'UNITS' | translate }}</option>
+              <option value="tons">{{ 'TONS' | translate }}</option>
+              <option value="quintals">{{ 'QUINTALS' | translate }}</option>
             </select>
           </div>
         </div>
@@ -74,7 +74,7 @@
         <!-- Harvest Date -->
         <div>
           <label class="block text-sm font-semibold text-slate-700 mb-2">
-            Harvest Date <span class="text-red-500">*</span>
+            {{ 'HARVEST_DATE' | translate }} <span class="text-red-500">*</span>
           </label>
           <input type="date" [(ngModel)]="harvestDate" name="harvestDate" [max]="today" required
             class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition" />
@@ -82,11 +82,11 @@
 
         <!-- GPS Location -->
         <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-2">GPS Location</label>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">{{ 'GPS_LOCATION' | translate }}</label>
           <div class="flex flex-col sm:flex-row gap-3">
             <input [(ngModel)]="gpsLocation" name="gpsLocation" readonly
               class="flex-1 px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 placeholder-slate-400"
-              placeholder="Click button to auto-detect location" />
+              [placeholder]="'LOCATION' | translate" />
             <button type="button" (click)="detectGPS()" [disabled]="loading"
               class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold rounded-lg shadow-sm hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap flex items-center justify-center gap-2">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,18 +95,18 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              Detect GPS
+              {{ 'DETECT_GPS' | translate }}
             </button>
           </div>
           <p class="mt-2 text-xs text-slate-500">
-            GPS coordinates will be recorded for product authenticity
+            {{ 'GPS_RECORDED_DESC' | translate }}
           </p>
         </div>
 
         <!-- Image Upload -->
         <div>
           <label class="block text-sm font-semibold text-slate-700 mb-2">
-            Product Image <span class="text-red-500">*</span>
+            {{ 'PRODUCT_IMAGE' | translate }} <span class="text-red-500">*</span>
           </label>
           <div
             class="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-emerald-500 transition">
@@ -121,8 +121,8 @@
                   </svg>
                 </div>
                 <div>
-                  <p class="text-slate-700 font-medium">Click to upload product image</p>
-                  <p class="text-sm text-slate-500 mt-1">PNG, JPG up to 10MB</p>
+                  <p class="text-slate-700 font-medium">{{ 'CLICK_TO_UPLOAD' | translate }}</p>
+                  <p class="text-sm text-slate-500 mt-1">{{ '5MB' | translate }}</p>
                 </div>
               </div>
             </label>
@@ -140,10 +140,10 @@
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                         clip-rule="evenodd" />
                     </svg>
-                    <p class="font-semibold text-emerald-700">Image uploaded successfully</p>
+                    <p class="font-semibold text-emerald-700">{{ 'IMAGE_UPLOAD_SUCCESS' | translate }}</p>
                   </div>
                   <p class="text-sm text-slate-600 mt-1">
-                    Your product image is ready for registration
+                    {{ 'IMAGE_READY_REGISTRATION' | translate }}
                   </p>
                 </div>
               </div>
@@ -161,10 +161,9 @@
                   clip-rule="evenodd" />
               </svg>
               <div>
-                <p class="text-sm font-semibold text-blue-900">Database Registration</p>
+                <p class="text-sm font-semibold text-blue-900">{{ 'DATABASE_REGISTRATION' | translate }}</p>
                 <p class="text-sm text-blue-700 mt-1">
-                  Your product will be registered on the Database with a unique QR code for
-                  verification and traceability.
+                  {{ 'DATABASE_REGISTRATION_DESC' | translate }}
                 </p>
               </div>
             </div>
@@ -180,12 +179,12 @@
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
             </path>
           </svg>
-          <span>{{ loading ? 'Registering Product...' : 'Register Product & Generate QR' }}</span>
+          <span>{{ loading ? ('REGISTERING_PRODUCT' | translate) : ('REGISTER' | translate) }}</span>
         </button>
 
         <!-- Required Fields Note -->
         <p class="text-center text-sm text-slate-500">
-          <span class="text-red-500">*</span> Required fields
+          <span class="text-red-500">*</span> {{ 'REQUIRED_FIELDS' | translate }}
         </p>
       </form>
     </div>
@@ -193,7 +192,7 @@
     <!-- Footer Info -->
     <div class="mt-8 text-center">
       <p class="text-sm text-slate-600">
-        Secured by <span class="font-semibold text-emerald-600">FarmChainX</span>Hashing Technology
+        {{ 'SECURED_BY_HASHING' | translate }}
       </p>
     </div>
   </div>

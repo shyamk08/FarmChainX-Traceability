@@ -123,4 +123,19 @@ export class ProductService {
     getDispatchHistory(): Observable<any[]> {
         return this.http.get<any[]>(`${this.apiUrl}/track/dispatch-history`);
     }
+
+    /**
+     * AI Crop Quality Grading
+     * POST /api/ai/grade
+     * Accepts imageUrl OR score parameters
+     */
+    gradeProduct(payload: {
+        imageUrl?: string;
+        colorScore?: number;
+        freshnessScore?: number;
+        sizeScore?: number;
+        price?: number;
+    }): Observable<{ grade: string; confidence: number; message: string; fraudRisk: boolean }> {
+        return this.http.post<any>(`${this.apiUrl}/ai/grade`, payload);
+    }
 }

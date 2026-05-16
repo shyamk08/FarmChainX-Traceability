@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, ViewChild, ElementRef, OnInit, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { Chart, registerables } from 'chart.js';
 import { CartService } from '../../../services/cart.service';
 import { ProductService } from '../../../services/product.service';
@@ -12,7 +13,7 @@ Chart.register(...registerables);
 @Component({
   selector: 'app-consumer-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, CartSidebarComponent], // DatePipe is standalone compatible or used in template implicitly if imported in module/standalone
+  imports: [CommonModule, RouterModule, CartSidebarComponent, TranslateModule], // DatePipe is standalone compatible or used in template implicitly if imported in module/standalone
   templateUrl: './consumer-dashboard.component.html',
 })
 export class ConsumerDashboardComponent implements AfterViewInit, OnInit {

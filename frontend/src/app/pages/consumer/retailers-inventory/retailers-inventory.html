@@ -4,8 +4,8 @@
   <!-- Header Section -->
   <div class="flex items-center justify-between">
     <div>
-      <h2 class="text-3xl font-bold text-slate-900">Retailers Inventory</h2>
-      <p class="text-slate-500 mt-1">Browse and purchase fresh products from verified retailers</p>
+      <h2 class="text-3xl font-bold text-slate-900">{{ 'RETAILERS_INVENTORY' | translate }}</h2>
+      <p class="text-slate-500 mt-1">{{ 'RETAILERS_INVENTORY_DESC' | translate }}</p>
     </div>
 
     <!-- Cart Button -->
@@ -19,7 +19,7 @@
         class="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full animate-pulse">
         {{ cartService.cartCount() }}
       </span>
-      <span class="sr-only">View Cart</span>
+      <span class="sr-only">{{ 'VIEW_CART' | translate }}</span>
     </button>
   </div>
 
@@ -54,14 +54,28 @@
               <path
                 d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
             </svg>
-            Grade {{ product.qualityGrade || 'N/A' }}
+            {{ 'GRADE' | translate }} {{ product.qualityGrade || 'N/A' }}
           </span>
         </div>
 
         <!-- Stock Status Badge -->
         <div class="absolute top-3 left-3 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-md"
           [ngClass]="getStockStatusClass(product.quantity)">
-          {{ getStockStatusText(product.quantity) }}
+          {{ getStockStatusText(product.quantity) | translate }}
+        </div>
+
+        <!-- AI Verified Badge + Tooltip -->
+        <div *ngIf="aiGrades[product.id]" class="absolute bottom-3 left-3 group/ai cursor-help">
+          <span class="flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-lg shadow-md border"
+            [ngClass]="getAIGradeBadgeClass(aiGrades[product.id]?.grade)">
+            🤖 AI: {{ aiGrades[product.id]?.grade }}
+            <span class="opacity-70 font-normal">({{ (aiGrades[product.id]?.confidence * 100).toFixed(0) }}%)</span>
+          </span>
+          <div class="absolute bottom-full left-0 mb-2 hidden group-hover/ai:block z-20 w-56 bg-slate-800 text-white text-xs rounded-lg p-2.5 shadow-xl">
+            <p class="font-semibold mb-1">🤖 AI Grade Analysis</p>
+            <p class="text-slate-300">{{ aiGrades[product.id]?.message }}</p>
+            <p *ngIf="aiGrades[product.id]?.fraudRisk" class="mt-1 text-yellow-300 font-semibold">⚠️ Suspicious pricing detected</p>
+          </div>
         </div>
       </div>
 
@@ -75,10 +89,9 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
-            <span class="font-medium text-emerald-600">{{ product.retailerName || product.sellerName || 'Verified
-              Retailer' }}</span>
+            <span class="font-medium text-emerald-600">{{ product.retailerName || product.sellerName || ('VERIFIED_RETAILER' | translate) }}</span>
           </p>
-          <p class="text-xs text-gray-400 mt-0.5">from {{ product.farmerName || 'Verified Farmer' }}</p>
+          <p class="text-xs text-gray-400 mt-0.5">{{ 'FROM' | translate }} {{ product.farmerName || ('VERIFIED_FARMER' | translate) }}</p>
         </div>
 
         <!-- Product Info -->
@@ -96,14 +109,14 @@
                 d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            <span class="line-clamp-1">{{ product.displayLocation || product.gpsLocation || 'Unknown' }}</span>
+            <span class="line-clamp-1">{{ product.displayLocation || product.gpsLocation || ('UNKNOWN' | translate) }}</span>
           </div>
           <div class="flex items-center gap-2">
             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
             </svg>
-            <span class="font-medium text-emerald-600">{{ product.quantity }} kg available</span>
+            <span class="font-medium text-emerald-600">{{ product.quantity }} {{ 'KG_AVAILABLE' | translate }}</span>
           </div>
         </div>
 
@@ -119,7 +132,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
-            <span>Add to Cart</span>
+            <span>{{ 'ADD_TO_CART' | translate }}</span>
           </button>
         </div>
       </div>
@@ -133,9 +146,8 @@
             d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
         </svg>
       </div>
-      <h3 class="text-xl font-semibold text-slate-900 mb-2">No Products Available</h3>
-      <p class="text-slate-500 max-w-md mx-auto">There are currently no products in retailers inventory. Retailers
-        need to accept dispatch offers from distributors first.</p>
+      <h3 class="text-xl font-semibold text-slate-900 mb-2">{{ 'NO_RETAILER_PRODUCTS_AVAILABLE' | translate }}</h3>
+      <p class="text-slate-500 max-w-md mx-auto">{{ 'NO_RETAILER_PRODUCTS_DESC' | translate }}</p>
     </div>
   </div>
 </div>

@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { ProductService } from '../../../services/product.service';
 import { CartService } from '../../../services/cart.service';
 import { CartSidebarComponent } from '../cart-sidebar/cart-sidebar.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-retailers-inventory',
-  imports: [CommonModule, CartSidebarComponent],
+  imports: [CommonModule, CartSidebarComponent, TranslateModule],
   templateUrl: './retailers-inventory.html',
   styleUrl: './retailers-inventory.scss',
   standalone: true
@@ -15,6 +16,7 @@ export class RetailersInventory implements OnInit {
   products = signal<any[]>([]);
   isCartOpen = signal(false);
   isLoading = signal(true);
+  aiGrades: Record<number, any> = {};
 
   constructor(
     private productService: ProductService,
@@ -29,15 +31,33 @@ export class RetailersInventory implements OnInit {
     this.isLoading.set(true);
     this.productService.getConsumerMarketProducts().subscribe({
       next: (data) => {
-        // Filter to show only IN_STOCK products
         const available = (data || []).filter(p => p.status === 'IN_STOCK' && p.quantity > 0);
         this.products.set(available);
         this.isLoading.set(false);
+        // Auto-grade each product
+        available.forEach(p => this.fetchAIGrade(p));
       },
       error: (err) => {
         console.error('Failed to load retailers inventory', err);
         this.isLoading.set(false);
       }
+    });
+  }
+
+  fetchAIGrade(product: any) {
+    const payload: any = {};
+    if (product.imagePath) {
+      payload.imageUrl = product.imagePath;
+    } else {
+      payload.colorScore = 75;
+      payload.freshnessScore = 80;
+      payload.sizeScore = 70;
+    }
+    if (product.price) payload.price = product.price;
+
+    this.productService.gradeProduct(payload).subscribe({
+      next: (result) => { this.aiGrades[product.id] = result; },
+      error: () => { /* silently skip - AI grade is optional */ }
     });
   }
 
@@ -60,9 +80,16 @@ export class RetailersInventory implements OnInit {
   }
 
   getStockStatusText(quantity: number): string {
-    if (quantity <= 0) return 'Out of Stock';
-    if (quantity < 10) return 'Low Stock';
-    return 'In Stock';
+    if (quantity <= 0) return 'OUT_OF_STOCK';
+    if (quantity < 10) return 'LOW_STOCK';
+    return 'IN_STOCK';
+  }
+
+  getAIGradeBadgeClass(grade: string): string {
+    if (!grade) return 'text-slate-600 bg-slate-50 border-slate-200';
+    if (grade === 'A') return 'text-emerald-700 bg-emerald-50 border-emerald-200';
+    if (grade === 'B') return 'text-yellow-700 bg-yellow-50 border-yellow-200';
+    return 'text-red-700 bg-red-50 border-red-200';
   }
 }
 

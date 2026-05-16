@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface AIPrediction {
   id: number;
@@ -21,7 +22,7 @@ interface AIPrediction {
 @Component({
   selector: 'app-farmer-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './farmer-dashboard.component.html',
 })
 export class FarmerDashboardComponent implements OnInit {

@@ -30,16 +30,16 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
-    private final AiService aiService;
+    private final QualityEvaluator qualityEvaluator;
     private final SupplyChainLogRepository supplyChainLogRepository;
 
     public ProductService(ProductRepository productRepository,
             UserRepository userRepository,
-            AiService aiService,
+            QualityEvaluator qualityEvaluator,
             SupplyChainLogRepository supplyChainLogRepository) {
         this.productRepository = productRepository;
         this.userRepository = userRepository;
-        this.aiService = aiService;
+        this.qualityEvaluator = qualityEvaluator;
         this.supplyChainLogRepository = supplyChainLogRepository;
     }
 
@@ -52,13 +52,14 @@ public class ProductService {
                 throw new IllegalStateException("Image path missing for grading");
             }
 
-            // ✅ Let AiService handle URL or local file. Do NOT pre-check with File.exists()
-            // here.
-            Map<String, Object> aiResult = aiService.predictQuality(path);
+            // Use QualityEvaluator with image URL
+            com.farmchainX.farmchainX.dto.AIGradeRequest req = new com.farmchainX.farmchainX.dto.AIGradeRequest();
+            req.setImageUrl(path);
+            com.farmchainX.farmchainX.dto.AIGradeResponse aiResult = qualityEvaluator.evaluate(req);
 
-            if (aiResult != null && aiResult.get("grade") != null && aiResult.get("confidence") != null) {
-                saved.setQualityGrade(String.valueOf(aiResult.get("grade")));
-                saved.setConfidenceScore(Double.parseDouble(aiResult.get("confidence").toString()));
+            if (aiResult != null && aiResult.getGrade() != null) {
+                saved.setQualityGrade(aiResult.getGrade());
+                saved.setConfidenceScore(aiResult.getConfidence());
                 return productRepository.save(saved);
             } else {
                 throw new IllegalStateException("AI returned empty result");

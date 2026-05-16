@@ -7,7 +7,7 @@ import { FindPipe } from '../../../pipes/find.pipe';
 @Component({
   selector: 'app-farmer-procurement',
   standalone: true,
-  imports: [CommonModule, DecimalPipe, DatePipe, FindPipe],
+  imports: [CommonModule, DecimalPipe, DatePipe],
   templateUrl: './farmer-procurement.component.html'
 })
 export class FarmerProcurementComponent implements OnInit {

@@ -22,16 +22,23 @@
         </div>
       </a>
 
-      <div class="hidden md:flex items-center gap-15 text-lg font-bold">
+      <div class="hidden md:flex items-center gap-8 text-lg font-bold">
+        <!-- Language Switcher -->
+        <div class="flex items-center gap-2 text-sm font-semibold">
+          <button (click)="changeLang('en')" class="px-2 py-1 rounded hover:bg-white/20 transition" [ngClass]="{'text-white': !isScrolled, 'text-gray-800': isScrolled}">EN</button>
+          <button (click)="changeLang('ta')" class="px-2 py-1 rounded hover:bg-white/20 transition" [ngClass]="{'text-white': !isScrolled, 'text-gray-800': isScrolled}">தமிழ்</button>
+          <button (click)="changeLang('hi')" class="px-2 py-1 rounded hover:bg-white/20 transition" [ngClass]="{'text-white': !isScrolled, 'text-gray-800': isScrolled}">हिन्दी</button>
+        </div>
+
         <ng-container *ngIf="!isLoggedIn">
           <a routerLink="/login"
             class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-7 py-3 rounded-full font-semibold shadow-xl hover:scale-105 transition">
-            Login
+            {{ 'LOGIN' | translate }}
           </a>
 
           <a routerLink="/register"
             class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-7 py-3 rounded-full font-semibold shadow-xl hover:scale-105 transition">
-            Register
+            {{ 'REGISTER' | translate }}
           </a>
         </ng-container>
 
@@ -42,17 +49,17 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M3 7v4a1 1 0 001 1h4M21 7v4a1 1 0 01-1 1h-4M3 17v-4a1 1 0 011-1h4M21 17v-4a1 1 0 00-1-1h-4" />
             </svg>
-            Scan
+            {{ 'SCAN' | translate }}
           </a>
 
           <ng-container *ngIf="isFarmer">
-            <a routerLink="/upload" class="text-gray-200 hover:text-white transition">Upload</a>
-            <a routerLink="/products/my" class="text-gray-200 hover:text-white transition">My Products</a>
+            <a routerLink="/upload" class="text-gray-200 hover:text-white transition">{{ 'UPLOAD' | translate }}</a>
+            <a routerLink="/products/my" class="text-gray-200 hover:text-white transition">{{ 'MY_PRODUCTS' | translate }}</a>
           </ng-container>
 
           <a *ngIf="isAdmin" routerLink="/admin"
             class="bg-gradient-to-r from-green-600 via-pink-600 to-green-600 hover:scale-110 transition text-white px-7 py-3 rounded-full shadow-xl font-bold">
-            Admin
+            {{ 'ADMIN' | translate }}
           </a>
 
           <div class="relative">
@@ -80,15 +87,15 @@
 
               <div class="py-2">
                 <a routerLink="/profile" (click)="toggleUserMenu()"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">View Profile</a>
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">{{ 'VIEW_PROFILE' | translate }}</a>
                 <a routerLink="/settings" (click)="toggleUserMenu()"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Settings</a>
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">{{ 'SETTINGS' | translate }}</a>
               </div>
 
               <div class="px-4 py-3 border-t">
                 <button (click)="logout(); toggleUserMenu()"
                   class="w-full bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition">
-                  Logout
+                  {{ 'LOGOUT' | translate }}
                 </button>
               </div>
             </div>
@@ -140,6 +147,13 @@
       </div>
 
       <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-4">
+        <!-- Language Switcher Mobile -->
+        <div class="flex items-center justify-center gap-4 py-2 mb-4" [ngClass]="{'border-b border-gray-200': isScrolled, 'border-b border-white/10': !isScrolled}">
+          <button (click)="changeLang('en'); closeMobileMenu()" class="px-3 py-1.5 rounded-full text-sm font-bold transition" [ngClass]="{'bg-gray-100 hover:bg-gray-200 text-gray-800': isScrolled, 'bg-white/10 hover:bg-white/20 text-white': !isScrolled}">EN</button>
+          <button (click)="changeLang('ta'); closeMobileMenu()" class="px-3 py-1.5 rounded-full text-sm font-bold transition" [ngClass]="{'bg-gray-100 hover:bg-gray-200 text-gray-800': isScrolled, 'bg-white/10 hover:bg-white/20 text-white': !isScrolled}">தமிழ்</button>
+          <button (click)="changeLang('hi'); closeMobileMenu()" class="px-3 py-1.5 rounded-full text-sm font-bold transition" [ngClass]="{'bg-gray-100 hover:bg-gray-200 text-gray-800': isScrolled, 'bg-white/10 hover:bg-white/20 text-white': !isScrolled}">हिन्दी</button>
+        </div>
+
         <div *ngIf="isLoggedIn" class="flex items-center gap-3 px-1 text-white">
           <div
             class="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xl">
@@ -164,7 +178,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M3 7v4a1 1 0 001 1h4M21 7v4a1 1 0 01-1 1h-4M3 17v-4a1 1 0 011-1h4M21 17v-4a1 1 0 00-1-1h-4" />
             </svg>
-            <span class="flex-1">Scan QR</span>
+            <span class="flex-1">{{ 'SCAN' | translate }}</span>
             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
@@ -178,7 +192,7 @@
             <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
-            <span class="flex-1">Upload Product</span>
+            <span class="flex-1">{{ 'UPLOAD' | translate }}</span>
             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
@@ -192,7 +206,7 @@
             <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18" />
             </svg>
-            <span class="flex-1">My Products</span>
+            <span class="flex-1">{{ 'MY_PRODUCTS' | translate }}</span>
             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
@@ -207,7 +221,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z" />
             </svg>
-            <span class="flex-1">Admin Panel</span>
+            <span class="flex-1">{{ 'ADMIN' | translate }}</span>
             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
@@ -223,7 +237,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4" />
               </svg>
-              <span class="flex-1">Login</span>
+              <span class="flex-1">{{ 'LOGIN' | translate }}</span>
             </a>
             <a routerLink="/register" (click)="closeMobileMenu()"
               class="flex items-center gap-3 px-4 py-4 hover:bg-gray-50" [ngClass]="{
@@ -233,7 +247,7 @@
               <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
               </svg>
-              <span class="flex-1">Register</span>
+              <span class="flex-1">{{ 'REGISTER' | translate }}</span>
             </a>
           </ng-container>
         </div>
@@ -246,7 +260,7 @@
         <div *ngIf="isLoggedIn" class="mb-3">
           <button (click)="logout(); closeMobileMenu()"
             class="w-full bg-red-600 text-white px-4 py-3 rounded-full font-semibold shadow-xl hover:bg-red-700 transition">
-            Logout
+            {{ 'LOGOUT' | translate }}
           </button>
         </div>
         <div *ngIf="!isLoggedIn" class="space-y-3">
@@ -254,12 +268,12 @@
             class="block w-full text-center px-4 py-3 border rounded-full font-semibold shadow-md transition" [ngClass]="{
               'text-emerald-600 bg-white border-gray-300 hover:bg-gray-50': isScrolled,
               'text-white bg-transparent border-white/30 hover:bg-white/10': !isScrolled
-            }">Login</a>
+            }">{{ 'LOGIN' | translate }}</a>
 
           <a routerLink="/register" (click)="closeMobileMenu()"
             class="block w-full text-center px-4 py-3 rounded-full font-semibold shadow-xl transition" [ngClass]="{
               'bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white': true
-            }">Register</a>
+            }">{{ 'REGISTER' | translate }}</a>
         </div>
       </div>
     </div>

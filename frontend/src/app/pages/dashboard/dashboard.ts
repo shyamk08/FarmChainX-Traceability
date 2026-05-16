@@ -2,11 +2,12 @@ import { Component, inject, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslateModule],
   selector: 'app-dashboard',
   templateUrl: './dashboard.html',
 })
@@ -27,29 +28,29 @@ export class Dashboard implements AfterViewInit {
       [key: string]: { label: string; route: string; subtitle: string };
     } = {
       ADMIN: {
-        label: 'Admin Panel',
+        label: 'ADMIN_PANEL',
         route: '/admin',
-        subtitle: 'You have elevated access',
+        subtitle: 'ADMIN_SUBTITLE',
       },
       DISTRIBUTOR: {
-        label: 'Distributor Panel',
+        label: 'DISTRIBUTOR_PANEL',
         route: '/distributor',
-        subtitle: 'Manage distribution',
+        subtitle: 'DISTRIBUTOR_SUBTITLE',
       },
       CONSUMER: {
-        label: 'Consumer Panel',
+        label: 'CONSUMER_PANEL',
         route: '/consumer',
-        subtitle: 'Track your purchases',
+        subtitle: 'CONSUMER_SUBTITLE',
       },
       RETAILER: {
-        label: 'Retailer Panel',
+        label: 'RETAILER_PANEL',
         route: '/retailer',
-        subtitle: 'Manage retail operations',
+        subtitle: 'RETAILER_SUBTITLE',
       },
       FARMER: {
-        label: 'Farmer Dashboard',
+        label: 'FARMER_DASHBOARD',
         route: '/farmer/dashboard',
-        subtitle: 'View AI predictions and insights',
+        subtitle: 'FARMER_SUBTITLE',
       },
     };
 

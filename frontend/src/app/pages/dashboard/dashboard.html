@@ -36,11 +36,11 @@
         <div class="bg-gradient-to-r from-green-800 to-emerald-800 px-8 py-12 sm:px-12 sm:py-16">
           <div class="max-w-3xl">
             <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
-              Welcome back, <span class="text-yellow-300 font-serif italic tracking-wide drop-shadow-sm">{{ name
+              {{ 'WELCOME_BACK' | translate }}, <span class="text-yellow-300 font-serif italic tracking-wide drop-shadow-sm">{{ name
                 }}</span>
             </h1>
             <p class="text-xl text-green-50 font-medium">
-              Ready to manage your supply chain today?
+              {{ 'DASHBOARD_SUBTITLE' | translate }}
             </p>
           </div>
         </div>
@@ -49,16 +49,16 @@
           <div class="flex items-center justify-between flex-wrap gap-4">
             <div>
               <p class="text-sm text-gray-500 uppercase tracking-wider font-semibold mb-2">
-                Current Role
+                {{ 'CURRENT_ROLE' | translate }}
               </p>
               <div class="inline-flex items-center gap-3 px-6 py-3 bg-green-100 border-2 border-green-200 rounded-full">
                 <span class="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></span>
-                <span class="text-green-900 font-bold text-lg">{{ role }}</span>
+                <span class="text-green-900 font-bold text-lg">{{ 'ROLE_' + role.toUpperCase() | translate }}</span>
               </div>
             </div>
             <div class="flex items-center gap-2 text-sm">
               <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span class="text-green-600 font-semibold">Online</span>
+              <span class="text-green-600 font-semibold">{{ 'ONLINE' | translate }}</span>
               <span class="text-gray-400">•</span> <span class="text-gray-500">FarmChainX</span>
             </div>
           </div>
@@ -68,7 +68,7 @@
 
     <!-- Action Cards Grid -->
     <div class="fade-in-delay">
-      <h2 class="text-2xl font-bold text-gray-900 mb-6">Quick Actions</h2>
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">{{ 'QUICK_ACTIONS' | translate }}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
 
 
@@ -92,7 +92,7 @@
               </div>
               <div>
                 <h3 class="text-3xl font-black text-white mb-2 group-hover:text-green-50 transition-colors">
-                  {{ panelConfig.label }}
+                  {{ panelConfig.label | translate }}
                 </h3>
                 <p class="text-green-100 font-semibold text-lg flex items-center gap-2">
                   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -100,7 +100,7 @@
                       d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                       clip-rule="evenodd" />
                   </svg>
-                  {{ panelConfig.subtitle }}
+                  {{ panelConfig.subtitle | translate }}
                 </p>
               </div>
             </div>
@@ -126,8 +126,8 @@
                 clip-rule="evenodd" />
             </svg>
           </div>
-          <h4 class="font-bold text-gray-900 mb-1">Secure</h4>
-          <p class="text-sm text-gray-600">End-to-end encryption</p>
+          <h4 class="font-bold text-gray-900 mb-1">{{ 'SECURE' | translate }}</h4>
+          <p class="text-sm text-gray-600">{{ 'SECURE_DESC' | translate }}</p>
         </div>
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
           <div class="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-full mb-4">
@@ -136,8 +136,8 @@
                 d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
             </svg>
           </div>
-          <h4 class="font-bold text-gray-900 mb-1">Database</h4>
-          <p class="text-sm text-gray-600">Transparent tracking</p>
+          <h4 class="font-bold text-gray-900 mb-1">{{ 'DATABASE' | translate }}</h4>
+          <p class="text-sm text-gray-600">{{ 'DATABASE_DESC' | translate }}</p>
         </div>
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
           <div class="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-full mb-4">
@@ -147,15 +147,15 @@
                 clip-rule="evenodd" />
             </svg>
           </div>
-          <h4 class="font-bold text-gray-900 mb-1">Verified</h4>
-          <p class="text-sm text-gray-600">Trusted by thousands</p>
+          <h4 class="font-bold text-gray-900 mb-1">{{ 'VERIFIED' | translate }}</h4>
+          <p class="text-sm text-gray-600">{{ 'VERIFIED_DESC' | translate }}</p>
         </div>
       </div>
     </div>
 
     <!-- Footer -->
     <div class="mt-12 text-center">
-      <p class="text-sm text-gray-500">© 2025 FarmChainX • Transparent Food Supply Chain</p>
+      <p class="text-sm text-gray-500">{{ 'FOOTER_TAGLINE' | translate }}</p>
     </div>
   </div>
 </div>

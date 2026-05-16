@@ -3,16 +3,18 @@ import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { AuthService } from '../../services/auth.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule],
+  imports: [CommonModule, RouterLink, LucideAngularModule, TranslateModule],
   templateUrl: './navbar.html'
 })
 export class Navbar {
   private router = inject(Router);
   private auth = inject(AuthService);
+  public translate = inject(TranslateService);
 
   mobileMenuOpen = false;
   userMenuOpen = false;
@@ -74,5 +76,9 @@ export class Navbar {
     this.closeMobileMenu();
     this.userMenuOpen = false;
     this.router.navigate(['/login']);
+  }
+
+  changeLang(lang: string) {
+    this.translate.use(lang);
   }
 }
