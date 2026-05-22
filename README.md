@@ -61,7 +61,7 @@ ng serve
 
 ---
 
-## 🗺️ Roadmap & Status
+## 🗺️ Roadmap and Status
 
 - [x] **Core Architecture**: Spring Boot + Angular Setup.
 - [x] **Authentication**: Secure Login/Register for all roles.
